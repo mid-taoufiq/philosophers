@@ -10,6 +10,7 @@ SRC =	philosophers.c \
 OBJ = ${SRC:.c=.o}
 
 all: ${NAME}
+	make clean && clear
 
 ${NAME}: ${OBJ}
 	cc ${FLAGS} ${OBJ} -o $@

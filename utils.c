@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/04/08 15:33:45 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/05/09 14:24:58 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,25 @@ void	usage_error(void)
 
 int	check_positive(char *str)
 {
+	int	success;
 	int value;
 
-	value = ft_atoi(str);
-	if (value <= 0)
+	success = 0;
+	value = ft_atoi(str, &success);
+	if (success == -2)
 	{
-		write(2, "all numbers must positive", 26),
+		write(2, "all numbers must positive\n", 27);
+		exit(1);
+	}
+	else if (success == -1)
+	{
+		write(2, "entre a valid numbers\n", 24);
 		exit(1);
 	}
 	return (value);
 }
 
-int	ft_atoi(char *nb)
+int	ft_atoi(char *nb, int *success)
 {
 	int		i;
 	long	result;
@@ -50,7 +57,7 @@ int	ft_atoi(char *nb)
 	if (nb[i] == '-' || nb[i] == '+')
 	{
 		if (nb[i] == '-')
-			signal = -1;
+			return (*success = -2, 0);
 		i++;
 	}
 	while (nb[i] >= '0' && nb[i] <= '9')
@@ -59,5 +66,7 @@ int	ft_atoi(char *nb)
 		result = (result * 10);
 		result += (nb[i++] - '0');
 	}
+	if (nb[i])
+		return (*success = -1, 0);
 	return (result * signal);
 }
