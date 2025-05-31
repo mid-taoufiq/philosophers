@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/05/09 14:04:17 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/05/31 16:51:09 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,22 @@
 
 typedef struct s_philo
 {
+	int				id;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
+}	t_philo;
+
+typedef struct s_info
+{
 	int	number_of_philos;
 	int	time_to_die;
-	int time_to_eat;
-	int time_to_sleep;
+	int	time_to_eat;
+	int	time_to_sleep;
 	int	number_of_times_philos_eat;
-}	t_philo;
+}	t_info;
 
 int		ft_atoi(char *nb, int *success);
 void	usage_error(void);
-int		check_positive(char *str);
+int		check_number(char *str);
 
 #endif

@@ -22,7 +22,7 @@ void	usage_error(void)
 	exit(1);
 }
 
-int	check_positive(char *str)
+int	check_number(char *str)
 {
 	int	success;
 	int value;
