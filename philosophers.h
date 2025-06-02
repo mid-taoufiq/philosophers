@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/05/31 16:51:09 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:23:11 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_philo
 
 typedef struct s_info
 {
-	int	number_of_philos;
+	int	philos_number;
 	int	time_to_die;
 	int	time_to_eat;
 	int	time_to_sleep;
