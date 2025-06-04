@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/02 18:03:39 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/04 12:01:00 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	*ft_calloc(size_t num, size_t size)
 	return (tmp);
 }
 
-void	philo_init(t_info data, int *forks)
+void	philo_init(t_info data, pthread_mutex_t *forks)
 {
 	t_philo	*philos;
 	int		i;
@@ -62,8 +62,8 @@ void	philo_init(t_info data, int *forks)
 	while (j < data.philos_number)
 	{
 		philos[j].id = i;
-		philos->left_fork = forks[j];
-		philos->right_fork = forks[(j + 1) % data.philos_number];
+		philos->left_fork = &forks[j];
+		philos->right_fork = &forks[(j + 1) % data.philos_number];
 		i++;
 		j++;
 	}
@@ -84,11 +84,13 @@ void	data_init(t_info *data, int argc, char **argv)
 
 int	main(int argc, char **argv)
 {
-	t_info	data;
-	int		*forks;
+	t_info			data;
+	pthread_mutex_t	*forks;
 
 	data_init(&data, argc, argv);
-	forks = ft_calloc(data.philos_number, sizeof(int));
+	forks = malloc(data.philos_number * sizeof(pthread_mutex_t));
+	if (!forks)
+		return (1);
 	philo_init(data, forks);
 	return (0);
 }

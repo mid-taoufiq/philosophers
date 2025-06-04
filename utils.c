@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/05/09 14:24:58 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/04 11:57:21 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	usage_error(void)
 int	check_number(char *str)
 {
 	int	success;
-	int value;
+	int	value;
 
 	success = 0;
 	value = ft_atoi(str, &success);
