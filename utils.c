@@ -36,7 +36,7 @@ int	check_number(char *str)
 	}
 	else if (success == -1)
 	{
-		write(2, "entre a valid numbers\n", 24);
+		write(2, "entre a valid numbers\n", 23);
 		exit(1);
 	}
 	return (value);
@@ -47,7 +47,6 @@ int	ft_atoi(char *nb, int *success)
 	int		i;
 	long	result;
 	int		signal;
-	long	check;
 
 	i = 0;
 	result = 0;
@@ -62,7 +61,6 @@ int	ft_atoi(char *nb, int *success)
 	}
 	while (nb[i] >= '0' && nb[i] <= '9')
 	{
-		check = result;
 		result = (result * 10);
 		result += (nb[i++] - '0');
 	}

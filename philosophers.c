@@ -12,43 +12,7 @@
 
 #include "philosophers.h"
 
-void	ft_bzero(void *s, size_t n)
-{
-	char	*ss;
-	size_t	i;
-
-	ss = (char *) s;
-	i = 0;
-	while (i < n)
-	{
-		ss[i] = 0;
-		i++;
-	}
-}
-
-void	*ft_calloc(size_t num, size_t size)
-{
-	void	*tmp;
-	size_t	total;
-
-	total = num * size;
-	if (num != 0 && (size != total / num))
-		return (NULL);
-	if (num == 0 || size == 0)
-	{
-		tmp = malloc(0);
-		if (!tmp)
-			return (NULL);
-		return (tmp);
-	}
-	tmp = malloc(num * size);
-	if (!tmp)
-		return (NULL);
-	ft_bzero(tmp, num * size);
-	return (tmp);
-}
-
-void	philo_init(t_info data, pthread_mutex_t *forks)
+t_philo	*philo_init(t_info data, pthread_mutex_t *forks)
 {
 	t_philo	*philos;
 	int		i;
@@ -58,16 +22,17 @@ void	philo_init(t_info data, pthread_mutex_t *forks)
 	j = 0;
 	philos = malloc(sizeof(t_philo) * (data.philos_number));
 	if (!philos)
-		return ;
+		return (NULL); // (write(2, "something is wrong\n", 20), exit(1));
 	while (j < data.philos_number)
 	{
 		philos[j].id = i;
-		philos->left_fork = &forks[j];
-		philos->right_fork = &forks[(j + 1) % data.philos_number];
+		philos[j].left_fork = &forks[j];
+		philos[j].right_fork = &forks[(j + 1) % data.philos_number];
 		i++;
 		j++;
 	}
 	i = 0;
+	return (philos);
 }
 
 void	data_init(t_info *data, int argc, char **argv)
@@ -85,12 +50,20 @@ void	data_init(t_info *data, int argc, char **argv)
 int	main(int argc, char **argv)
 {
 	t_info			data;
+	int				i;
 	pthread_mutex_t	*forks;
+	t_philo			*philos;
 
+	i = 0;
 	data_init(&data, argc, argv);
 	forks = malloc(data.philos_number * sizeof(pthread_mutex_t));
 	if (!forks)
 		return (1);
-	philo_init(data, forks);
+	while (i < data.philos_number)
+	{
+		pthread_mutex_init(&forks[i], NULL);
+		i++;
+	}
+	philos = philo_init(data, forks);
 	return (0);
 }
