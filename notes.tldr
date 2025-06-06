@@ -401,9 +401,9 @@
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": -808.8648315696008,
-			"y": 2724.0986656921696,
-			"lastActivityTimestamp": 1749085395373,
+			"x": -197.49597421805652,
+			"y": 3089.645846376644,
+			"lastActivityTimestamp": 1749158053555,
 			"meta": {}
 		},
 		{
@@ -3781,9 +3781,9 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 985.1688135347675,
-			"y": -2544.468193501245,
-			"z": 0.3006171466420508,
+			"x": 704.5605819103633,
+			"y": -2859.9207406803407,
+			"z": 1.4444165999957363,
 			"meta": {},
 			"id": "camera:page:page",
 			"typeName": "camera"
@@ -4111,6 +4111,57 @@
 			},
 			"parentId": "page:page",
 			"index": "b0d2Tp",
+			"typeName": "shape"
+		},
+		{
+			"x": -403.5307193908786,
+			"y": 3100.8617629492105,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:73cEWt_uWxgDxx7AN1nr_",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "m",
+				"w": 560.7437744140625,
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 1,
+				"richText": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "for finishing meals: each philo finishes join it"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "for dead : join all philos in a function"
+								}
+							]
+						}
+					]
+				}
+			},
+			"parentId": "page:page",
+			"index": "b0kAsJ",
 			"typeName": "shape"
 		},
 		{
@@ -7181,9 +7232,11 @@
 			"typeName": "shape"
 		},
 		{
-			"editingShapeId": null,
+			"editingShapeId": "shape:73cEWt_uWxgDxx7AN1nr_",
 			"croppingShapeId": null,
-			"selectedShapeIds": [],
+			"selectedShapeIds": [
+				"shape:73cEWt_uWxgDxx7AN1nr_"
+			],
 			"hoveredShapeId": null,
 			"erasingShapeIds": [],
 			"hintingShapeIds": [],
@@ -18200,13 +18253,11 @@
 		{
 			"followingUserId": null,
 			"opacityForNextShape": 1,
-			"stylesForNextShape": {
-				"tldraw:color": "red"
-			},
+			"stylesForNextShape": {},
 			"brush": null,
 			"scribbles": [],
 			"cursor": {
-				"type": "cross",
+				"type": "default",
 				"rotation": 0
 			},
 			"isFocusMode": false,
@@ -18216,8 +18267,8 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 1702,
-				"h": 747
+				"w": 2085.60009765625,
+				"h": 832.800048828125
 			},
 			"insets": [
 				false,
@@ -18232,9 +18283,9 @@
 			"isChatting": false,
 			"highlightedUserIds": [],
 			"isFocused": true,
-			"devicePixelRatio": 1,
+			"devicePixelRatio": 0.8333333134651184,
 			"isCoarsePointer": false,
-			"isHoveringCanvas": false,
+			"isHoveringCanvas": true,
 			"openMenus": [],
 			"isChangingStyle": false,
 			"isReadonly": false,
