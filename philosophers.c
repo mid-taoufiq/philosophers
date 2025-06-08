@@ -12,10 +12,44 @@
 
 #include "philosophers.h"
 
-// void	routine(void)
-// {
-// 	while ()
-// }
+void	monitoring(t_all all)
+{
+
+}
+
+
+void	routine(t_all all)
+{
+	while (!all.data.is_dead && !all.data.is_finished)
+	{
+		printf("philosopher %d is thinking\n", all.philos->id);
+		if (all.philos->id % 2 == 0)
+		{
+			pthread_mutex_lock(&all.philos->left_fork);
+			pthread_mutex_lock(&all.philos->right_fork);
+			printf("philosopher %d is eating\n", all.philos->id);
+			usleep(all.data.time_to_eat * 1000);
+			printf("philosopher %d is sleeping\n", all.philos->id);
+			usleep(all.data.time_to_sleep * 1000);
+			all.philos->meals_eaten++;
+			pthread_mutex_unlock(&all.philos->left_fork);
+			pthread_mutex_unlock(&all.philos->right_fork);
+		}
+		else
+		{
+			pthread_mutex_lock(&all.philos->left_fork);
+			pthread_mutex_lock(&all.philos->right_fork);
+			printf("philosopher %d is eating\n", all.philos->id);
+			usleep(all.data.time_to_eat * 1000);
+			printf("philosopher %d is sleeping\n", all.philos->id);
+			usleep(all.data.time_to_sleep * 1000);
+			all.philos->meals_eaten++;
+			pthread_mutex_unlock(&all.philos->left_fork);
+			pthread_mutex_unlock(&all.philos->right_fork);
+		}
+	}
+}
+
 
 void	philo_init(t_all *all)
 {
@@ -31,8 +65,9 @@ void	philo_init(t_all *all)
 		all->philos[i].id = i + 1;
 		all->philos[i].meals_eaten = 0;
 		all->philos[i].left_fork = &all->data.forks[i];
-		all->philos[i].right_fork = &all->data.forks[(i + 1) % all->data.philos_number];
-		pthread_create(&all->philos[i].thread, NULL, routine(), &all);
+		all->philos[i].right_fork = &all->data.forks[
+			(i + 1) % all->data.philos_number];
+		pthread_create(&all->philos[i].thread, NULL, routine, &all);
 		i++;
 	}
 }
@@ -57,9 +92,11 @@ void	data_init(t_all *all, int argc, char **argv)
 int	main(int argc, char **argv)
 {
 	t_all		all;
+	pthread_t	monitor;
 	int			i;
 
 	i = 0;
+	pthread_create(&monitor, NULL, monitoring, &all);
 	data_init(&all, argc, argv);
 	while (i < all.data.philos_number)
 	{

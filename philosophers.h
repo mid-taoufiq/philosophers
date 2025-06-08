@@ -16,14 +16,15 @@
 # include <pthread.h>
 # include <stdio.h>
 # include <string.h>
-# include <unistd.h>
+#include <unistd.h>
 # include <stdlib.h>
 
 typedef struct s_philo
 {
 	int				id;
-	int				meals_eaten;
 	pthread_t		thread;
+	int				meals_eaten;
+	int				last_meal;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 }	t_philo;
