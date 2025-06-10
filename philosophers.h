@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/09 11:58:25 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:59:31 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,17 @@
 #include <unistd.h>
 # include <stdlib.h>
 
-typedef struct s_data
-{
-	int				is_dead;
-	int				is_finished;
-	pthread_mutex_t	*forks;
-}	t_data;
-
 typedef struct s_info
 {
-	int	philos_number;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	number_of_times_philos_eat;
+	int				philos_number;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				number_of_times_philos_eat;	
+	int				is_dead;
+	int				is_finished;
+	pthread_mutex_t	print;
+	pthread_mutex_t	*forks;
 }	t_info;
 
 typedef struct s_philo
