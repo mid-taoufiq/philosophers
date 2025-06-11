@@ -46,5 +46,7 @@ typedef struct s_philo
 int		ft_atoi(char *nb, int *success);
 void	usage_error(void);
 int		check_number(char *str);
+void	*routine(void *arg);
+void	monitoring(void *arg);
 
 #endif

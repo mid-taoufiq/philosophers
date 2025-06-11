@@ -5,8 +5,9 @@ HEADER = philosophers.h
 FLAGS = -Wall -Wextra -Werror -g -fsanitize=thread
 
 SRC =	philosophers.c \
-		utils.c
-
+		utils.c \
+		routine.c \
+		monitor.c
 OBJ = ${SRC:.c=.o}
 
 all: ${NAME}

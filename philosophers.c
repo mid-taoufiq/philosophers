@@ -12,51 +12,6 @@
 
 #include "philosophers.h"
 
-// void	monitoring(t_all all)
-// {
-
-// }
-
-
-void	*routine(void *arg)
-{
-	t_philo	*philos;
-
-	philos = arg;
-	pthread_mutex_lock(&philos->info->print);
-	printf("philosopher %d is thinking\n", philos->id);
-	pthread_mutex_unlock(&philos->info->print);
-	while (!philos->info->is_dead && !philos->info->is_finished)
-	{
-		printf("philosopher %d is thinking\n", philos->id);
-		if (philos->id % 2 == 0)
-		{
-			pthread_mutex_lock(&philos->left_fork);
-			pthread_mutex_lock(&philos->right_fork);
-			printf("philosopher %d is eating\n", philos->id);
-			usleep(philos->info->time_to_eat * 1000);
-			printf("philosopher %d is sleeping\n", philos->id);
-			usleep(philos->info->time_to_sleep * 1000);
-			philos->meals_eaten++;
-			pthread_mutex_unlock(&philos->left_fork);
-			pthread_mutex_unlock(&philos->right_fork);
-		}
-		else
-		{
-			pthread_mutex_lock(&philos->left_fork);
-			pthread_mutex_lock(&philos->right_fork);
-			printf("philosopher %d is eating\n", philos->id);
-			usleep(philos->info->time_to_eat * 1000);
-			printf("philosopher %d is sleeping\n", philos->id);
-			usleep(philos->info->time_to_sleep * 1000);
-			philos->meals_eaten++;
-			pthread_mutex_unlock(&philos->left_fork);
-			pthread_mutex_unlock(&philos->right_fork);
-		}
-	}
-	return (0);
-}
-
 void	start_routine(t_philo *philos, t_info info)
 {
 	int	i;
@@ -81,11 +36,11 @@ void	join_philos(t_philo *philos, t_info info)
 	}
 }
 
-
 void	philo_init(t_info info)
 {
-	t_philo	*philos;
-	int		i;
+	t_philo		*philos;
+	pthread_t	monitor;
+	int			i;
 
 	i = 0;
 	philos = malloc(sizeof(t_philo) * (info.philos_number));
@@ -101,8 +56,10 @@ void	philo_init(t_info info)
 		philos[i].info = &info;
 		i++;
 	}
+	pthread_create(&monitor, NULL, routine, &philos);
 	start_routine(philos, info);
 	join_philos(philos, info);
+	pthread_join(monitor, NULL);
 }
 
 void	data_init(t_info *info, int argc, char **argv)
@@ -125,11 +82,9 @@ void	data_init(t_info *info, int argc, char **argv)
 int	main(int argc, char **argv)
 {
 	t_info		info;
-	// pthread_t	monitor;
 	int			i;
 
 	i = 0;
-	// pthread_create(&monitor, NULL, monitoring, &all);
 	data_init(&info, argc, argv);
 	while (i < info.philos_number)
 	{

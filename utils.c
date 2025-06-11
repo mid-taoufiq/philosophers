@@ -39,7 +39,6 @@ int	check_number(char *str)
 		write(2, "entre a valid numbers\n", 23);
 		exit(1);
 	}
-	// printf ("%d\n", value);
 	return (value);
 }
 
