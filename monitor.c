@@ -1,5 +1,3 @@
-
-
 #include "philosophers.h"
 
 // void	monitoring(void *arg)

@@ -1,5 +1,3 @@
-
-
 #include "philosophers.h"
 
 void	even_eat_sleep(t_philo *philo)
@@ -66,4 +64,3 @@ void	*routine(void *arg)
 	}
 	return (0);
 }
-
