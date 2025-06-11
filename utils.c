@@ -69,7 +69,18 @@ int	ft_atoi(char *nb, int *success)
 	return (result * signal);
 }
 
-void	ft_sleep()
+void	ft_sleep(size_t time, t_philo *philo)
+{
+	size_t	i;
+
+	i = 0;
+	time = time * 1000;
+	while (!philo->info->dead_or_finished && i < time)
+	{
+		usleep(300);
+		i += 300;
+	}
+}
 
 size_t	timer(int start)
 {
@@ -78,7 +89,7 @@ size_t	timer(int start)
 	static size_t	start_time;
 
 	gettimeofday(&tv, NULL);
-	current_time = (size_t)tv.tv_sec * 1000 - tv.tv_usec / 1000;
+	current_time = (size_t)tv.tv_usec / 1000 + tv.tv_sec * 1000;
 	if (start)
 		start_time = current_time;
 	return (current_time - start_time);

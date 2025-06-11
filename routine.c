@@ -12,56 +12,78 @@
 
 #include "philosophers.h"
 
-void	even_eat_sleep(t_philo *philo, size_t time)
+void	even_eat_sleep(t_philo *philo, size_t *time)
 {
 	pthread_mutex_lock(philo->right_fork);
+	pthread_mutex_lock(&philo->info->time);
+	*time = timer(0);
+	pthread_mutex_unlock(&philo->info->time);
 	pthread_mutex_lock(&philo->info->print);
-	printf("%zu %d has taken a fork\n", time, philo->id);
+	printf("%zu %d has taken a fork\n", *time, philo->id);
 	pthread_mutex_unlock(&philo->info->print);
 	pthread_mutex_lock(philo->left_fork);
 	pthread_mutex_lock(&philo->info->print);
-	printf("%zu %d has taken a fork\n", time, philo->id);
+	printf("%zu %d has taken a fork\n", *time, philo->id);
 	pthread_mutex_unlock(&philo->info->print);
+	pthread_mutex_lock(&philo->info->time);
+	*time = timer(0);
+	pthread_mutex_unlock(&philo->info->time);
 	pthread_mutex_lock(&philo->info->print);
-	time = timer(0);
-	printf("%zu %d is eating\n", time, philo->id);
+	printf("%zu %d is eating\n", *time, philo->id);
 	pthread_mutex_unlock(&philo->info->print);
-	usleep(philo->info->time_to_eat * 1000);
+	ft_sleep(philo->info->time_to_eat, philo);
 	philo->meals_eaten++;
-	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_lock(&philo->info->time);
+	*time = timer(0);
+	pthread_mutex_unlock(&philo->info->time);
 	pthread_mutex_lock(&philo->info->print);
-	time = timer(0);
-	printf("%zu %d is sleeping\n", time, philo->id);
+	printf("%zu %d is sleeping\n", *time, philo->id);
 	pthread_mutex_unlock(&philo->info->print);
-	usleep(philo->info->time_to_sleep * 1000);
+	ft_sleep(philo->info->time_to_sleep, philo);
 }
 
-void	odd_eat_sleep(t_philo *philo, size_t time)
+void	odd_eat_sleep(t_philo *philo, size_t *time)
 {
-	usleep(1000);
+	ft_sleep(1, philo);
 	pthread_mutex_lock(philo->left_fork);
+	pthread_mutex_lock(&philo->info->time);
+	*time = timer(0);
+	pthread_mutex_unlock(&philo->info->time);
 	pthread_mutex_lock(&philo->info->print);
-	time = timer(0);
-	printf("%zu %d has taken a fork\n", time, philo->id);
+	printf("%zu %d has taken a fork\n", *time, philo->id);
 	pthread_mutex_unlock(&philo->info->print);
 	pthread_mutex_lock(philo->right_fork);
 	pthread_mutex_lock(&philo->info->print);
-	printf("%zu %d has taken a fork\n", time, philo->id);
+	printf("%zu %d has taken a fork\n", *time, philo->id);
 	pthread_mutex_unlock(&philo->info->print);
+	pthread_mutex_lock(&philo->info->time);
+	*time = timer(0);
+	pthread_mutex_unlock(&philo->info->time);
 	pthread_mutex_lock(&philo->info->print);
-	time = timer(0);
-	printf("%zu %d is eating\n", time, philo->id);
+	printf("%zu %d is eating\n", *time, philo->id);
 	pthread_mutex_unlock(&philo->info->print);
-	usleep(philo->info->time_to_eat * 1000);
+	ft_sleep(philo->info->time_to_eat, philo);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_lock(&philo->info->time);
+	*time = timer(0);
+	pthread_mutex_unlock(&philo->info->time);
 	pthread_mutex_lock(&philo->info->print);
-	time = timer(0);
-	printf("%zu %d is sleeping\n", time, philo->id);
+	printf("%zu %d is sleeping\n", *time, philo->id);
 	pthread_mutex_unlock(&philo->info->print);
-	usleep(philo->info->time_to_sleep * 1000);
+	ft_sleep(philo->info->time_to_sleep, philo);
+}
+
+int	check_mutex(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->info->endflag);
+	if (philo->info->dead_or_finished)
+		return (pthread_mutex_unlock(&philo->info->endflag), 1);
+	else
+		return (pthread_mutex_unlock(&philo->info->endflag), 0);
 }
 
 void	*routine(void *arg)
@@ -70,19 +92,18 @@ void	*routine(void *arg)
 	size_t	time;
 
 	philo = arg;
-	pthread_mutex_lock(&philo->info->print);
-	time = timer(1);
-	pthread_mutex_unlock(&philo->info->print);
-	while (!philo->info->is_dead && !philo->info->is_finished)
+	while (!check_mutex(philo))
 	{
+		pthread_mutex_lock(&philo->info->time);
+		pthread_mutex_unlock(&philo->info->time);
 		if (philo->id % 2 == 0)
-			even_eat_sleep(philo, time);
+			even_eat_sleep(philo, &time);
 		pthread_mutex_lock(&philo->info->print);
 		time = timer(0);
 		printf("%zu %d is thinking\n", time, philo->id);
 		pthread_mutex_unlock(&philo->info->print);
 		if (philo->id % 2 != 0)
-			odd_eat_sleep(philo, time);
+			odd_eat_sleep(philo, &time);
 	}
 	return (0);
 }

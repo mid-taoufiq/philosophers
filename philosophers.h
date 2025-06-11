@@ -27,9 +27,10 @@ typedef struct s_info
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				number_of_times_philos_eat;	
-	int				is_dead;
-	int				is_finished;
+	int				dead_or_finished;
 	pthread_mutex_t	print;
+	pthread_mutex_t	endflag;
+	pthread_mutex_t	time;
 	pthread_mutex_t	*forks;
 }	t_info;
 
@@ -49,6 +50,7 @@ void	usage_error(void);
 int		check_number(char *str);
 void	*routine(void *arg);
 size_t	timer(int start);
-void	monitoring(void *arg);
+void	ft_sleep(size_t time, t_philo *philo);
+// void	monitoring(void *arg);
 
 #endif

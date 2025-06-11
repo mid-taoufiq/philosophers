@@ -72,8 +72,7 @@ void	data_init(t_info *info, int argc, char **argv)
 	info->time_to_sleep = check_number(argv[4]);
 	if (argc == 6)
 		info->number_of_times_philos_eat = check_number(argv[5]);
-	info->is_finished = 0;
-	info->is_dead = 0;
+	info->dead_or_finished = 0;
 	info->forks = malloc(info->philos_number * sizeof(pthread_mutex_t));
 	if (!info->forks)
 		return ;
@@ -84,6 +83,7 @@ int	main(int argc, char **argv)
 	t_info		info;
 	int			i;
 
+	timer(1);
 	i = 0;
 	data_init(&info, argc, argv);
 	while (i < info.philos_number)
@@ -92,6 +92,8 @@ int	main(int argc, char **argv)
 		i++;
 	}
 	pthread_mutex_init(&info.print, NULL);
+	pthread_mutex_init(&info.endflag, NULL);
+	pthread_mutex_init(&info.time, NULL);
 	philo_init(info);
 	return (0);
 }
