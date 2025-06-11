@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/04 11:57:21 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/11 16:02:55 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,19 @@ int	ft_atoi(char *nb, int *success)
 	if (nb[i])
 		return (*success = -1, 0);
 	return (result * signal);
+}
+
+void	ft_sleep()
+
+size_t	timer(int start)
+{
+	struct timeval	tv;
+	size_t			current_time;
+	static size_t	start_time;
+
+	gettimeofday(&tv, NULL);
+	current_time = (size_t)tv.tv_sec * 1000 - tv.tv_usec / 1000;
+	if (start)
+		start_time = current_time;
+	return (current_time - start_time);
 }

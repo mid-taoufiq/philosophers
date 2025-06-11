@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/10 16:05:37 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/11 15:36:45 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	join_philos(t_philo *philos, t_info info)
 void	philo_init(t_info info)
 {
 	t_philo		*philos;
-	pthread_t	monitor;
+	// pthread_t	monitor;
 	int			i;
 
 	i = 0;
@@ -56,10 +56,10 @@ void	philo_init(t_info info)
 		philos[i].info = &info;
 		i++;
 	}
-	pthread_create(&monitor, NULL, routine, &philos);
+	// pthread_create(&monitor, NULL, monitor, &philos);
 	start_routine(philos, info);
 	join_philos(philos, info);
-	pthread_join(monitor, NULL);
+	// pthread_join(monitor, NULL);
 }
 
 void	data_init(t_info *info, int argc, char **argv)

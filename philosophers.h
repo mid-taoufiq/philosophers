@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/10 15:59:31 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/11 15:50:31 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <sys/time.h>
 
 typedef struct s_info
 {
@@ -47,6 +48,7 @@ int		ft_atoi(char *nb, int *success);
 void	usage_error(void);
 int		check_number(char *str);
 void	*routine(void *arg);
+size_t	timer(int start);
 void	monitoring(void *arg);
 
 #endif
