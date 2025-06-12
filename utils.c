@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/11 16:02:55 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/12 13:28:45 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	check_number(char *str)
 	int	value;
 
 	success = 0;
-	value = ft_atoi(str, &success);
+	value = ft_atol(str, &success);
 	if (success == -2)
 	{
 		write(2, "all numbers must positive\n", 27);
@@ -42,7 +42,7 @@ int	check_number(char *str)
 	return (value);
 }
 
-int	ft_atoi(char *nb, int *success)
+long	ft_atol(char *nb, int *success)
 {
 	int		i;
 	long	result;

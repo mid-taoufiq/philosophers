@@ -6,27 +6,30 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/11 15:36:45 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:48:38 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	start_routine(t_philo *philos, t_info info)
+void	start_routine(t_all *all)
 {
-	int	i;
+	size_t		i;
+	pthread_t	monitor;
 
 	i = 0;
-	while (i < info.philos_number)
+	while (i < all->info.philos_number)
 	{
-		pthread_create(&philos[i].thread, NULL, routine, &philos[i]);
+		pthread_create(&all->philos[i].thread, NULL, routine, &all->philos[i]);
 		i++;
 	}
+	pthread_create(&monitor, NULL, monitoring, all);
+	pthread_join(monitor, NULL);
 }
 
-void	join_philos(t_philo *philos, t_info info)
+void	join_threads(t_philo *philos, t_info info)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (i < info.philos_number)
@@ -36,64 +39,64 @@ void	join_philos(t_philo *philos, t_info info)
 	}
 }
 
-void	philo_init(t_info info)
+void	philo_init(t_all *all)
 {
-	t_philo		*philos;
-	// pthread_t	monitor;
-	int			i;
+	size_t		i;
 
 	i = 0;
-	philos = malloc(sizeof(t_philo) * (info.philos_number));
-	if (!philos)
+	all->philos = malloc(sizeof(t_philo) * (all->info.philos_number));
+	if (!all->philos)
 		return ;
-	while (i < info.philos_number)
+	while (i < all->info.philos_number)
 	{
-		philos[i].id = i + 1;
-		philos[i].meals_eaten = 0;
-		philos[i].left_fork = &info.forks[i];
-		philos[i].right_fork = &info.forks[
-			(i + 1) % info.philos_number];
-		philos[i].info = &info;
+		all->philos[i].id = i + 1;
+		all->philos[i].meals_eaten = 0;
+		all->philos[i].left_fork = &all->info.forks[i];
+		all->philos[i].right_fork = &all->info.forks[
+			(i + 1) % all->info.philos_number];
+		all->philos[i].info = &all->info;
 		i++;
 	}
-	// pthread_create(&monitor, NULL, monitor, &philos);
-	start_routine(philos, info);
-	join_philos(philos, info);
-	// pthread_join(monitor, NULL);
+	start_routine(all);
+	join_threads(all->philos, all->info);
 }
 
-void	data_init(t_info *info, int argc, char **argv)
+void	data_init(t_all *all, int argc, char **argv)
 {
 	if (argc != 5 && argc != 6)
 		usage_error();
-	info->philos_number = check_number(argv[1]);
-	info->time_to_die = check_number(argv[2]);
-	info->time_to_eat = check_number(argv[3]);
-	info->time_to_sleep = check_number(argv[4]);
+	all->info.philos_number = check_number(argv[1]);
+	all->info.time_to_die = check_number(argv[2]);
+	all->info.time_to_eat = check_number(argv[3]);
+	all->info.time_to_sleep = check_number(argv[4]);
 	if (argc == 6)
-		info->number_of_times_philos_eat = check_number(argv[5]);
-	info->dead_or_finished = 0;
-	info->forks = malloc(info->philos_number * sizeof(pthread_mutex_t));
-	if (!info->forks)
+		all->info.number_of_times_philos_eat = check_number(argv[5]);
+	else
+		all->info.number_of_times_philos_eat = 0;
+	all->info.dead_or_finished = 0;
+	all->info.forks = malloc(all->info.philos_number * sizeof(pthread_mutex_t));
+	if (!all->info.forks)
 		return ;
 }
 
 int	main(int argc, char **argv)
 {
-	t_info		info;
-	int			i;
+	t_all		all;
+	size_t		i;
 
 	timer(1);
 	i = 0;
-	data_init(&info, argc, argv);
-	while (i < info.philos_number)
+	data_init(&all, argc, argv);
+	while (i < all.info.philos_number)
 	{
-		pthread_mutex_init(&info.forks[i], NULL);
+		pthread_mutex_init(&all.info.forks[i], NULL);
 		i++;
 	}
-	pthread_mutex_init(&info.print, NULL);
-	pthread_mutex_init(&info.endflag, NULL);
-	pthread_mutex_init(&info.time, NULL);
-	philo_init(info);
+	pthread_mutex_init(&all.info.print, NULL);
+	pthread_mutex_init(&all.info.endflag, NULL);
+	pthread_mutex_init(&all.info.i, NULL);
+	pthread_mutex_init(&all.info.meals_mutex, NULL);
+	pthread_mutex_init(&all.info.time, NULL);
+	philo_init(&all);
 	return (0);
 }
