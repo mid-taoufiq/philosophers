@@ -14,7 +14,6 @@
 
 void	even_eat_sleep(t_philo *philo, size_t time)
 {
-	usleep(300);
 	pthread_mutex_lock(philo->right_fork);
 	action_printer(1, time, philo->id, philo);
 	pthread_mutex_lock(philo->left_fork);
@@ -70,6 +69,8 @@ void	*routine(void *arg)
 	size_t	time;
 
 	philo = arg;
+	if (philo->id % 2 == 0)
+		usleep(300);
 	while (!dead_fin_conditon(philo))
 	{
 		if (philo->id % 2 == 0)

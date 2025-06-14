@@ -71,10 +71,8 @@ long	ft_atol(char *nb, int *success)
 
 void	ft_sleep(size_t time)
 {
-	size_t	i;
 	size_t	start;
 
-	i = 0;
 	start = timer(0);
 	while (timer(0) - start < time)
 		usleep(400);
