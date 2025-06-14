@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:58:20 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/13 15:29:08 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/14 13:57:19 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	timer_mutex(t_philo *philo, size_t *time)
 
 void	action_printer(int option, size_t time, int id, t_philo *philo)
 {
+	timer_mutex(philo, &time);
 	pthread_mutex_lock(&philo->info->endflag);
 	if (option == 1 && !philo->info->dead_or_finished)
 	{

@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/13 11:21:29 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/14 14:40:56 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,15 @@ long	ft_atol(char *nb, int *success)
 	return (result * signal);
 }
 
-void	ft_sleep(size_t time, t_philo *philo)
+void	ft_sleep(size_t time)
 {
 	size_t	i;
+	size_t	start;
 
 	i = 0;
-	time = time * 1000;
-	while (!dead_fin_conditon(philo) && i < time)
-	{
-		usleep(300);
-		i += 300;
-	}
+	start = timer(0);
+	while (timer(0) - start < time)
+		usleep(400);
 }
 
 size_t	timer(int start)
@@ -89,7 +87,7 @@ size_t	timer(int start)
 	static size_t	start_time;
 
 	gettimeofday(&tv, NULL);
-	current_time = (size_t)tv.tv_usec / 1000 + tv.tv_sec * 1000;
+	current_time = (size_t)tv.tv_sec * 1000 + tv.tv_usec / 1000;
 	if (start)
 		start_time = current_time;
 	return (current_time - start_time);
