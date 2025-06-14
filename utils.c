@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/12 13:28:45 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/13 11:21:29 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	ft_sleep(size_t time, t_philo *philo)
 
 	i = 0;
 	time = time * 1000;
-	while (!philo->info->dead_or_finished && i < time)
+	while (!dead_fin_conditon(philo) && i < time)
 	{
 		usleep(300);
 		i += 300;
