@@ -27,7 +27,7 @@ typedef struct s_info
 	size_t			time_to_die;
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
-	size_t			number_of_times_philos_eat;
+	size_t			times_philo_must_eat;
 	pthread_mutex_t	i;
 	pthread_mutex_t	print;
 	pthread_mutex_t	endflag;
@@ -39,9 +39,10 @@ typedef struct s_info
 typedef struct s_philo
 {
 	int				id;
-	pthread_t		thread;
-	int				meals_eaten;
+	int				finished;
+	size_t			meals_eaten;
 	size_t			last_meal;
+	pthread_t		thread;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	t_info			*info;

@@ -64,7 +64,7 @@ long	ft_atol(char *nb, int *success)
 		result = (result * 10);
 		result += (nb[i++] - '0');
 	}
-	if (nb[i])
+	if (nb[i] || result == 0)
 		return (*success = -1, 0);
 	return (result * signal);
 }

@@ -70,9 +70,9 @@ void	data_init(t_all *all, int argc, char **argv)
 	all->info.time_to_eat = check_number(argv[3]);
 	all->info.time_to_sleep = check_number(argv[4]);
 	if (argc == 6)
-		all->info.number_of_times_philos_eat = check_number(argv[5]);
+		all->info.times_philo_must_eat = check_number(argv[5]);
 	else
-		all->info.number_of_times_philos_eat = 0;
+		all->info.times_philo_must_eat = 0;
 	all->info.dead_or_finished = 0;
 	all->info.forks = malloc(all->info.philos_number * sizeof(pthread_mutex_t));
 	if (!all->info.forks)
