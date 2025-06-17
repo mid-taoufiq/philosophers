@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:16:00 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/14 14:33:10 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:44:24 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,6 @@ void	*routine(void *arg)
 	{
 		if (philo->id % 2 == 0)
 			even_eat_sleep(philo, time);
-		pthread_mutex_lock(&philo->info->endflag);
-		pthread_mutex_unlock(&philo->info->endflag);
 		if (philo->id % 2 != 0)
 			odd_eat_sleep(philo, time);
 	}
