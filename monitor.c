@@ -12,16 +12,32 @@
 
 #include "philosophers.h"
 
+bool	check_finished(t_all *all)
+{
+	size_t	j;
+
+	j = 0;
+	while (j < all->info.philos_number)
+	{
+		if (all->philos[j].finished == 1)
+			j++;
+		else
+			break ;
+	}
+	if (j == all->info.philos_number)
+		return (true);
+	else
+		return (false);
+}
+
 void	*monitoring(void *arg)
 {
 	size_t	i;
-	size_t	j;
 	size_t	flag;
 	size_t	current_time;
 	t_all	*all;
 
 	all = arg;
-	j = 0;
 	while (1)
 	{
 		i = 0;
@@ -43,23 +59,17 @@ void	*monitoring(void *arg)
 			}
 			if (all->info.times_philo_must_eat > 0)
 			{
-				while (j < all->info.philos_number)
-				{
-					if (all->philos[j].finished == 1)
-					{
-						j++;
-						continue ;
-					}
-				}
-				if (j == all->info.philos_number)
+				if (check_finished(all))
 				{
 					pthread_mutex_lock(&all->info.endflag);
 					all->info.dead_or_finished = 1;
 					pthread_mutex_unlock(&all->info.endflag);
+					return (0);
 				}
-				if (all->philos[i].meals_eaten == all->info.times_philo_must_eat)
+				if (all->philos[i].meals_eaten == all->info.times_philo_must_eat) // data race meals_eaten
+				{
 					all->philos[i].finished = 1;
-				j = 0;
+				}
 			}
 			i++;
 		}

@@ -68,17 +68,17 @@ void	*routine(void *arg)
 
 	philo = arg;
 	time = 0;
-	timer_mutex(philo, &time);
-	if (!philo->info->dead_or_finished)
-	{
-		pthread_mutex_lock(&philo->info->print);
-		printf("%zu %d is thinking\n", time, philo->id);
-		pthread_mutex_unlock(&philo->info->print);
-	}
 	if (philo->id % 2 == 0)
 		usleep(300);
 	while (!dead_fin_conditon(philo))
 	{
+		timer_mutex(philo, &time);
+		if (!philo->info->dead_or_finished)
+		{
+			pthread_mutex_lock(&philo->info->print);
+			printf("%zu %d is thinking\n", time, philo->id);
+			pthread_mutex_unlock(&philo->info->print);
+		}
 		if (philo->id % 2 == 0)
 			even_eat_sleep(philo, time);
 		if (philo->id % 2 != 0)
