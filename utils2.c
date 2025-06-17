@@ -25,26 +25,26 @@ void	timer_mutex(t_philo *philo, size_t *time)
 	pthread_mutex_unlock(&philo->info->time);
 }
 
-void	action_printer(int option, size_t time, int id, t_philo *philo)
+void	action_printer(int option, size_t *time, int id, t_philo *philo)
 {
-	timer_mutex(philo, &time);
+	timer_mutex(philo, time);
 	pthread_mutex_lock(&philo->info->endflag);
 	if (option == 1 && !philo->info->dead_or_finished)
 	{
 		pthread_mutex_lock(&philo->info->print);
-		printf("%zu %d has taken a fork\n", time, id);
+		printf("%zu %d has taken a fork\n", *time, id);
 		pthread_mutex_unlock(&philo->info->print);
 	}
 	else if (option == 2 && !philo->info->dead_or_finished)
 	{
 		pthread_mutex_lock(&philo->info->print);
-		printf("%zu %d is eating\n", time, id);
+		printf("%zu %d is eating\n", *time, id);
 		pthread_mutex_unlock(&philo->info->print);
 	}
 	else if (option == 3 && !philo->info->dead_or_finished)
 	{
 		pthread_mutex_lock(&philo->info->print);
-		printf("%zu %d is sleeping\n", time, id);
+		printf("%zu %d is sleeping\n", *time, id);
 		pthread_mutex_unlock(&philo->info->print);
 	}
 	pthread_mutex_unlock(&philo->info->endflag);

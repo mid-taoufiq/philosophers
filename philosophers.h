@@ -63,7 +63,7 @@ void	timer_mutex(t_philo *philo, size_t *time);
 void	ft_sleep(size_t time);
 int		dead_fin_conditon(t_philo *philo);
 void	*monitoring(void *arg);
-void	action_printer(int option, size_t time, int id, t_philo *philo);
+void	action_printer(int option, size_t *time, int id, t_philo *philo);
 void	unlock_mutexes(t_philo *philo);
 
 #endif
