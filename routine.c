@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:16:00 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/17 17:44:24 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:11:40 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ void	even_eat_sleep(t_philo *philo, size_t time)
 	philo->last_meal = time;
 	pthread_mutex_unlock(&philo->info->meals_mutex);
 	ft_sleep(philo->info->time_to_eat);
+	pthread_mutex_lock(&philo->info->meals_mutex);
 	philo->meals_eaten++;
+	pthread_mutex_unlock(&philo->info->meals_mutex);
 	unlock_mutexes(philo);
 	action_printer(3, &time, philo->id, philo);
 	ft_sleep(philo->info->time_to_sleep);
@@ -40,7 +42,9 @@ void	odd_eat_sleep(t_philo *philo, size_t time)
 	philo->last_meal = time;
 	pthread_mutex_unlock(&philo->info->meals_mutex);
 	ft_sleep(philo->info->time_to_eat);
+	pthread_mutex_lock(&philo->info->meals_mutex);
 	philo->meals_eaten++;
+	pthread_mutex_unlock(&philo->info->meals_mutex);
 	unlock_mutexes(philo);
 	action_printer(3, &time, philo->id, philo);
 	ft_sleep(philo->info->time_to_sleep);

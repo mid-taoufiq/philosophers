@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:18:52 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/17 17:53:36 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/18 14:59:36 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,11 @@ void	*monitoring(void *arg)
 					pthread_mutex_unlock(&all->info.endflag);
 					return (0);
 				}
-				if (all->philos[i].meals_eaten == all->info.times_philo_must_eat) // data race meals_eaten
-				{
+				pthread_mutex_lock(&all->info.meals_mutex);
+				if (all->philos[i].meals_eaten == all->info.times_philo_must_eat)
 					all->philos[i].finished = 1;
-				}
+				pthread_mutex_unlock(&all->info.meals_mutex);
+				
 			}
 			i++;
 		}

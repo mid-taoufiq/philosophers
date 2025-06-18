@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/14 14:11:26 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:01:41 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	philo_init(t_all *all)
 		all->philos[i].right_fork = &all->info.forks[
 			(i + 1) % all->info.philos_number];
 		all->philos[i].info = &all->info;
+		all->philos[i].finished = 0;
 		i++;
 	}
 	start_routine(all);
