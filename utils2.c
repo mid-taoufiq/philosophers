@@ -12,6 +12,15 @@
 
 #include "philosophers.h"
 
+void	mutex_init(t_all *all)
+{
+	pthread_mutex_init(&all->info.print, NULL);
+	pthread_mutex_init(&all->info.endflag, NULL);
+	pthread_mutex_init(&all->info.i, NULL);
+	pthread_mutex_init(&all->info.meals_mutex, NULL);
+	pthread_mutex_init(&all->info.time, NULL);
+}
+
 void	unlock_mutexes(t_philo *philo)
 {
 	pthread_mutex_unlock(philo->left_fork);

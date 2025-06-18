@@ -14,6 +14,7 @@
 # define PHILOSOPHERS_H
 
 # include <pthread.h>
+# include <limits.h>
 # include <stdio.h>
 # include <stdbool.h>
 # include <string.h>
@@ -55,7 +56,7 @@ typedef struct s_all
 	t_philo	*philos;
 }	t_all;
 
-long	ft_atol(char *nb, int *success);
+int		ft_atoi(char *nb, int *success);
 void	usage_error(void);
 int		check_number(char *str);
 void	*routine(void *arg);
@@ -65,6 +66,7 @@ void	ft_sleep(size_t time);
 int		dead_fin_conditon(t_philo *philo);
 void	*monitoring(void *arg);
 void	action_printer(int option, size_t *time, int id, t_philo *philo);
+void	mutex_init(t_all *all);
 void	unlock_mutexes(t_philo *philo);
 
 #endif

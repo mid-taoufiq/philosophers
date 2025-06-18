@@ -28,7 +28,7 @@ int	check_number(char *str)
 	int	value;
 
 	success = 0;
-	value = ft_atol(str, &success);
+	value = ft_atoi(str, &success);
 	if (success == -2)
 	{
 		write(2, "all numbers must positive\n", 27);
@@ -42,15 +42,13 @@ int	check_number(char *str)
 	return (value);
 }
 
-long	ft_atol(char *nb, int *success)
+int	ft_atoi(char *nb, int *success)
 {
 	int		i;
 	long	result;
-	int		signal;
 
 	i = 0;
 	result = 0;
-	signal = 1;
 	while ((nb[i] >= 9 && nb[i] <= 13) || nb[i] == 32)
 		i++;
 	if (nb[i] == '-' || nb[i] == '+')
@@ -61,12 +59,14 @@ long	ft_atol(char *nb, int *success)
 	}
 	while (nb[i] >= '0' && nb[i] <= '9')
 	{
-		result = (result * 10);
-		result += (nb[i++] - '0');
+		result = (result * 10) + (nb[i] - '0');
+		if (result > INT_MAX)
+			return (*success = -1, 0);
+		i++;
 	}
 	if (nb[i] || result == 0)
 		return (*success = -1, 0);
-	return (result * signal);
+	return ((int)result);
 }
 
 void	ft_sleep(size_t time)

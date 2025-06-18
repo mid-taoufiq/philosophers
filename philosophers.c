@@ -27,7 +27,7 @@ void	start_routine(t_all *all)
 	pthread_join(monitor, NULL);
 }
 
-void	join_threads(t_philo *philos, t_info info)
+void	join_free(t_philo *philos, t_info info)
 {
 	size_t	i;
 
@@ -37,6 +37,14 @@ void	join_threads(t_philo *philos, t_info info)
 		pthread_join(philos[i].thread, NULL);
 		i++;
 	}
+	i = 0;
+	free(philos);
+	while (i < info.philos_number)
+	{
+		pthread_mutex_destroy(&info.forks[i]);
+		i++;
+	}
+	free(info.forks);
 }
 
 void	philo_init(t_all *all)
@@ -59,7 +67,7 @@ void	philo_init(t_all *all)
 		i++;
 	}
 	start_routine(all);
-	join_threads(all->philos, all->info);
+	join_free(all->philos, all->info);
 }
 
 void	data_init(t_all *all, int argc, char **argv)
@@ -93,11 +101,7 @@ int	main(int argc, char **argv)
 		pthread_mutex_init(&all.info.forks[i], NULL);
 		i++;
 	}
-	pthread_mutex_init(&all.info.print, NULL);
-	pthread_mutex_init(&all.info.endflag, NULL);
-	pthread_mutex_init(&all.info.i, NULL);
-	pthread_mutex_init(&all.info.meals_mutex, NULL);
-	pthread_mutex_init(&all.info.time, NULL);
+	mutex_init(&all);
 	philo_init(&all);
 	return (0);
 }
