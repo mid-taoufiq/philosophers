@@ -10,7 +10,34 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosophers.h"
+#include "philosophers_bonus.h"
+
+int	ft_atoi(char *nb, int *success)
+{
+	int		i;
+	long	result;
+
+	i = 0;
+	result = 0;
+	while ((nb[i] >= 9 && nb[i] <= 13) || nb[i] == 32)
+		i++;
+	if (nb[i] == '-' || nb[i] == '+')
+	{
+		if (nb[i] == '-')
+			return (*success = -2, 0);
+		i++;
+	}
+	while (nb[i] >= '0' && nb[i] <= '9')
+	{
+		result = (result * 10) + (nb[i] - '0');
+		if (result > INT_MAX)
+			return (*success = -1, 0);
+		i++;
+	}
+	if (nb[i] || result == 0)
+		return (*success = -1, 0);
+	return ((int)result);
+}
 
 void	usage_error(void)
 {
@@ -40,33 +67,6 @@ int	check_number(char *str)
 		exit(1);
 	}
 	return (value);
-}
-
-int	ft_atoi(char *nb, int *success)
-{
-	int		i;
-	long	result;
-
-	i = 0;
-	result = 0;
-	while ((nb[i] >= 9 && nb[i] <= 13) || nb[i] == 32)
-		i++;
-	if (nb[i] == '-' || nb[i] == '+')
-	{
-		if (nb[i] == '-')
-			return (*success = -2, 0);
-		i++;
-	}
-	while (nb[i] >= '0' && nb[i] <= '9')
-	{
-		result = (result * 10) + (nb[i] - '0');
-		if (result > INT_MAX)
-			return (*success = -1, 0);
-		i++;
-	}
-	if (nb[i] || result == 0)
-		return (*success = -1, 0);
-	return ((int)result);
 }
 
 void	ft_sleep(size_t time)

@@ -12,7 +12,7 @@
 
 #include "philosophers.h"
 
-void	even_eat_sleep(t_philo *philo, size_t time)
+static void	even_eat_sleep(t_philo *philo, size_t time)
 {
 	pthread_mutex_lock(philo->right_fork);
 	action_printer(1, &time, philo->id, philo);
@@ -31,7 +31,7 @@ void	even_eat_sleep(t_philo *philo, size_t time)
 	ft_sleep(philo->info->time_to_sleep);
 }
 
-void	odd_eat_sleep(t_philo *philo, size_t time)
+static void	odd_eat_sleep(t_philo *philo, size_t time)
 {
 	pthread_mutex_lock(philo->left_fork);
 	action_printer(1, &time, philo->id, philo);
@@ -50,7 +50,7 @@ void	odd_eat_sleep(t_philo *philo, size_t time)
 	ft_sleep(philo->info->time_to_sleep);
 }
 
-int	dead_fin_conditon(t_philo *philo)
+static int	dead_fin_conditon(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->info->endflag);
 	if (!philo->info->dead_or_finished)

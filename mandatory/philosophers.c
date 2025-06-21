@@ -12,22 +12,7 @@
 
 #include "philosophers.h"
 
-void	start_routine(t_all *all)
-{
-	size_t		i;
-	pthread_t	monitor;
-
-	i = 0;
-	while (i < all->info.philos_number)
-	{
-		pthread_create(&all->philos[i].thread, NULL, routine, &all->philos[i]);
-		i++;
-	}
-	pthread_create(&monitor, NULL, monitoring, all);
-	pthread_join(monitor, NULL);
-}
-
-void	join_free(t_philo *philos, t_info info)
+static void	join_free(t_philo *philos, t_info info)
 {
 	size_t	i;
 
@@ -38,16 +23,41 @@ void	join_free(t_philo *philos, t_info info)
 		i++;
 	}
 	i = 0;
-	free(philos);
 	while (i < info.philos_number)
 	{
 		pthread_mutex_destroy(&info.forks[i]);
 		i++;
 	}
+	free(philos);
 	free(info.forks);
 }
 
-void	philo_init(t_all *all)
+static void	start_routine(t_all *all)
+{
+	size_t		i;
+	pthread_t	monitor;
+
+	i = 0;
+	while (i < all->info.philos_number)
+	{
+		if (pthread_create(&all->philos[i].thread,
+				NULL, routine, &all->philos[i]) == -1)
+		{
+			while (i > 0)
+			{
+				pthread_join(all->philos[i].thread, NULL);
+				i--;
+			}
+			pthread_join(all->philos[0].thread, NULL);
+		}
+		i++;
+	}
+	if (pthread_create(&monitor, NULL, monitoring, all))
+		pthread_join(monitor, NULL);
+	pthread_join(monitor, NULL);
+}
+
+static void	philo_init(t_all *all)
 {
 	size_t		i;
 
@@ -70,22 +80,32 @@ void	philo_init(t_all *all)
 	join_free(all->philos, all->info);
 }
 
-void	data_init(t_all *all, int argc, char **argv)
+static int	data_init(t_all *all, int argc, char **argv)
 {
 	if (argc != 5 && argc != 6)
 		usage_error();
 	all->info.philos_number = check_number(argv[1]);
+	if (all->info.philos_number == 0)
+		return (0);
 	all->info.time_to_die = check_number(argv[2]);
+	if (all->info.time_to_die == 0)
+		return (0);
 	all->info.time_to_eat = check_number(argv[3]);
+	if (all->info.time_to_eat == 0)
+		return (0);
 	all->info.time_to_sleep = check_number(argv[4]);
+	if (all->info.time_to_sleep == 0)
+		return (0);
 	if (argc == 6)
+	{
 		all->info.times_philo_must_eat = check_number(argv[5]);
+		if (all->info.times_philo_must_eat == 0)
+			return (0);
+	}
 	else
 		all->info.times_philo_must_eat = 0;
 	all->info.dead_or_finished = 0;
-	all->info.forks = malloc(all->info.philos_number * sizeof(pthread_mutex_t));
-	if (!all->info.forks)
-		return ;
+	return (1);
 }
 
 int	main(int argc, char **argv)
@@ -95,7 +115,11 @@ int	main(int argc, char **argv)
 
 	timer(1);
 	i = 0;
-	data_init(&all, argc, argv);
+	if (!data_init(&all, argc, argv))
+		return (1);
+	all.info.forks = malloc(all.info.philos_number * sizeof(pthread_mutex_t));
+	if (!all.info.forks)
+		return (1);
 	while (i < all.info.philos_number)
 	{
 		pthread_mutex_init(&all.info.forks[i], NULL);
