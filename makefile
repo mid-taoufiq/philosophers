@@ -31,9 +31,9 @@ bonus/%.o: bonus/%.c ./bonus/philosophers_bonus.h
 	cc $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf ${OBJ}
+	rm -rf ${OBJ} ${BOBJ}
 
 fclean: clean
-	rm -rf ${NAME}
+	rm -rf ${NAME} ${NAME_BONUS}
 
 re: fclean ${NAME}
