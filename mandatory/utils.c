@@ -69,13 +69,22 @@ int	check_number(char *str)
 	return (value);
 }
 
-void	ft_sleep(size_t time)
+void	ft_sleep(size_t time, t_philo *philo) //to_eat
 {
 	size_t	start;
 
 	start = timer(0);
 	while (timer(0) - start < time)
+	{
+		pthread_mutex_lock(&philo->info->endflag);
+		if (philo->info->dead_or_finished)
+		{
+			pthread_mutex_unlock(&philo->info->endflag);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->info->endflag);
 		usleep(400);
+	}
 }
 
 size_t	timer(int start)

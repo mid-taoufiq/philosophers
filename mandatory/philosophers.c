@@ -43,17 +43,14 @@ static void	start_routine(t_all *all)
 		if (pthread_create(&all->philos[i].thread,
 				NULL, routine, &all->philos[i]) == -1)
 		{
-			while (i > 0)
-			{
+			while ((int)--i >= 0)
 				pthread_join(all->philos[i].thread, NULL);
-				i--;
-			}
-			pthread_join(all->philos[0].thread, NULL);
+			return ;
 		}
 		i++;
 	}
-	if (pthread_create(&monitor, NULL, monitoring, all))
-		pthread_join(monitor, NULL);
+	if (pthread_create(&monitor, NULL, monitoring, all) == -1)
+		return (join_free(all->philos, all->info));
 	pthread_join(monitor, NULL);
 }
 

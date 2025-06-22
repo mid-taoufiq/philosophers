@@ -4,7 +4,7 @@ NAME_BONUS = philo_bonus
 HEADER = philosophers.h
 BHEADER = philosophers_bonus.h
 
-FLAGS = -Wall -Wextra -Werror -g -fsanitize=thread
+FLAGS = -Wall -Wextra -Werror
 
 SRC =	./mandatory/philosophers.c \
 		./mandatory/utils.c \
