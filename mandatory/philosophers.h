@@ -65,7 +65,7 @@ void	timer_mutex(t_philo *philo, size_t *time);
 void	ft_sleep(size_t time, t_philo *philo);
 void	*monitoring(void *arg);
 void	action_printer(int option, size_t *time, int id, t_philo *philo);
-void	mutex_init(t_all *all);
+int		mutex_init(t_all *all);
 void	unlock_mutexes(t_philo *philo);
 
 #endif

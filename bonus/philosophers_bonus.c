@@ -69,11 +69,11 @@ void	monitoring(t_all *all)
 		while (i < all->info.philos_number)
 		{
 			if (dead_part(all, i))
-				return (0);
+				return ;
 			if (all->info.times_philo_must_eat > 0)
 			{
 				if (finished_part(all, i))
-					return (0);
+					return ;
 			}
 			i++;
 		}
@@ -83,14 +83,11 @@ void	monitoring(t_all *all)
 
 static void	routine(t_all *all, size_t philon, sem_t **forks, sem_t **print)
 {
-	size_t	time;
-
-	time = 0;
 	while (!all->info.dead_or_finished)
 	{
-		philo_take(philon, all, forks, print);
+		philo_take(philon, forks, print);
 		philo_eat(philon, all, forks, print);
-		philo_sleep(philon, all, forks, print);
+		philo_sleep(philon, all, print);
 	}
 	exit(0);
 }
@@ -108,10 +105,10 @@ static void	start_routine(t_all *all, sem_t **forks, sem_t **print)
 		if (!pid)
 		{
 			time = timer(0);
-			sem_wait(print);
-			printf("%zu %d is sleeping\n", time, i + 1);
-			sem_post(print);
-			routine(all, i + 1, &forks, &print);
+			sem_wait(*print);
+			printf("%zu %ld is sleeping\n", time, i + 1);
+			sem_post(*print);
+			routine(all, i + 1, forks, print);
 		}
 		else
 			i++;
@@ -160,14 +157,8 @@ static void	data_init(t_all *all, int argc, char **argv)
 int	main(int argc, char **argv)
 {
 	t_all	all;
-	size_t	i;
-	sem_t	*forks;
-	sem_t	*print;
 
 	timer(1);
-	forks = sem_open("/forks", O_CREAT, 0777, all.info.philos_number);
-	print = sem_open("/print", O_CREAT, 0777, 1);
-	i = 0;
 	data_init(&all, argc, argv);
 	philo_init(&all);
 	return (0);

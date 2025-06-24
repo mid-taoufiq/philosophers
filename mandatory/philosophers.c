@@ -119,10 +119,16 @@ int	main(int argc, char **argv)
 		return (1);
 	while (i < all.info.philos_number)
 	{
-		pthread_mutex_init(&all.info.forks[i], NULL);
+		if (pthread_mutex_init(&all.info.forks[i], NULL) != 0)
+		{
+			while ((int)--i >= 0)
+				pthread_mutex_destroy(&all.info.forks[i]);
+			return (1);
+		}
 		i++;
 	}
-	mutex_init(&all);
+	if (mutex_init(&all) != 0)
+		return (1);
 	philo_init(&all);
 	return (0);
 }

@@ -22,6 +22,7 @@
 # include <semaphore.h>
 # include <fcntl.h>
 # include <sys/stat.h>
+ #include <sys/wait.h>
 
 typedef struct s_info
 {
@@ -52,10 +53,10 @@ int		ft_atoi(char *nb, int *success);
 void	usage_error(void);
 int		check_number(char *str);
 size_t	timer(int start);
-void	ft_sleep(size_t time);
-void	*monitoring(void *arg);
-void	philo_take(size_t philon, t_all *all, sem_t **forks, sem_t **print);
+void	ft_sleep(size_t time, t_info info);
+void	monitoring(t_all *all);
+void	philo_take(size_t philon, sem_t **forks, sem_t **print);
 void	philo_eat(size_t philon, t_all *all, sem_t **forks, sem_t **print);
-void	philo_sleep(size_t philon, t_all *all, sem_t **forks, sem_t **print);
+void	philo_sleep(size_t philon, t_all *all, sem_t **print);
 
 #endif

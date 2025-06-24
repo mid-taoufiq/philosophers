@@ -69,7 +69,7 @@ int	check_number(char *str)
 	return (value);
 }
 
-void	ft_sleep(size_t time, t_philo *philo) //to_eat
+void	ft_sleep(size_t time, t_philo *philo)
 {
 	size_t	start;
 

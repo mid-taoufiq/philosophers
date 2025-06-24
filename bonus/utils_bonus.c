@@ -69,13 +69,17 @@ int	check_number(char *str)
 	return (value);
 }
 
-void	ft_sleep(size_t time)
+void	ft_sleep(size_t time, t_info info)
 {
 	size_t	start;
 
 	start = timer(0);
 	while (timer(0) - start < time)
+	{
+		if (info.dead_or_finished)
+			break ;
 		usleep(400);
+	}
 }
 
 size_t	timer(int start)
