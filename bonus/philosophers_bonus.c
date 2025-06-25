@@ -72,11 +72,6 @@ void	monitoring(t_all *all, sem_t *print)
 		{
 			if (dead_part(all, i, print))
 				return ;
-			// if (all->info.times_philo_must_eat > 0)
-			// {
-			// 	if (finished_part(all, i))
-			// 		return ;
-			// }
 			i++;
 		}
 	}
@@ -87,7 +82,6 @@ static void	routine(t_all *all, size_t philon, sem_t *forks, sem_t *print)
 {
 	while (!all->info.dead_or_finished)
 	{
-		printf("i like boobs\n");
 		philo_take(philon, forks, print);
 		philo_eat(philon, all, forks, print);
 		philo_sleep(philon, all, print);
@@ -129,6 +123,8 @@ static void	start_routine(t_all *all)
 	i = 0;
 	while (i < all->info.philos_number)
 		(waitpid(pid[i], &status, 0), i++);
+	sem_unlink("/forks");
+	sem_unlink("/print");
 }
 
 static void	philo_init(t_all *all)
@@ -145,7 +141,6 @@ static void	philo_init(t_all *all)
 		all->philos[i].finished = 0;
 		all->philos[i].meals_eaten = 0;
 		all->philos[i].last_meal = 0;
-		all->philos[i].info = &all->info;
 		i++;
 	}
 	start_routine(all);

@@ -40,7 +40,6 @@ typedef struct s_philo
 	int				finished;
 	size_t			meals_eaten;
 	size_t			last_meal;
-	t_info			*info;
 }	t_philo;
 
 typedef struct s_all
