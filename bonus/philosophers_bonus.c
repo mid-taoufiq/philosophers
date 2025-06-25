@@ -1,48 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers.c                                     :+:      :+:    :+:   */
+/*   philosophers_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/18 15:01:41 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:12:03 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
 
-static bool	check_finished(t_all *all)
-{
-	size_t	j;
+// static bool	check_finished(t_all *all)
+// {
+// 	size_t	j;
 
-	j = 0;
-	while (j < all->info.philos_number)
-	{
-		if (all->philos[j].finished == 1)
-			j++;
-		else
-			break ;
-	}
-	if (j == all->info.philos_number)
-		return (true);
-	else
-		return (false);
-}
+// 	j = 0;
+// 	while (j < all->info.philos_number)
+// 	{
+// 		if (all->philos[j].finished == 1)
+// 			j++;
+// 		else
+// 			break ;
+// 	}
+// 	if (j == all->info.philos_number)
+// 		return (true);
+// 	else
+// 		return (false);
+// }
 
-static bool	finished_part(t_all *all, size_t i)
-{
-	if (check_finished(all))
-	{
-		all->info.dead_or_finished = 1;
-		return (true);
-	}
-	if (all->philos[i].meals_eaten == all->info.times_philo_must_eat)
-		all->philos[i].finished = 1;
-	return (false);
-}
+// static bool	finished_part(t_all *all, size_t i)
+// {
+// 	if (check_finished(all))
+// 	{
+// 		all->info.dead_or_finished = 1;
+// 		return (true);
+// 	}
+// 	if (all->philos[i].meals_eaten == all->info.times_philo_must_eat)
+// 		all->philos[i].finished = 1;
+// 	return (false);
+// }
 
-static bool	dead_part(t_all *all, size_t i)
+static bool	dead_part(t_all *all, size_t i, sem_t *print)
 {
 	size_t	current_time;
 	size_t	flag;
@@ -52,13 +52,15 @@ static bool	dead_part(t_all *all, size_t i)
 	if (flag > all->info.time_to_die)
 	{
 		all->info.dead_or_finished = 1;
+		sem_wait(print);
 		printf("%zu %lu died\n", current_time, i + 1);
+		sem_post(print);
 		return (true);
 	}
 	return (false);
 }
 
-void	monitoring(t_all *all)
+void	monitoring(t_all *all, sem_t *print)
 {
 	size_t	i;
 
@@ -68,23 +70,24 @@ void	monitoring(t_all *all)
 		i = 0;
 		while (i < all->info.philos_number)
 		{
-			if (dead_part(all, i))
+			if (dead_part(all, i, print))
 				return ;
-			if (all->info.times_philo_must_eat > 0)
-			{
-				if (finished_part(all, i))
-					return ;
-			}
+			// if (all->info.times_philo_must_eat > 0)
+			// {
+			// 	if (finished_part(all, i))
+			// 		return ;
+			// }
 			i++;
 		}
 	}
 	return ;
 }
 
-static void	routine(t_all *all, size_t philon, sem_t **forks, sem_t **print)
+static void	routine(t_all *all, size_t philon, sem_t *forks, sem_t *print)
 {
 	while (!all->info.dead_or_finished)
 	{
+		printf("i like boobs\n");
 		philo_take(philon, forks, print);
 		philo_eat(philon, all, forks, print);
 		philo_sleep(philon, all, print);
@@ -92,40 +95,49 @@ static void	routine(t_all *all, size_t philon, sem_t **forks, sem_t **print)
 	exit(0);
 }
 
-static void	start_routine(t_all *all, sem_t **forks, sem_t **print)
+static void	start_routine(t_all *all)
 {
 	size_t	i;
-	pid_t	pid;
+	pid_t	*pid;
 	size_t	time;
+	int		status;
+	sem_t	*forks;
+	sem_t	*print;
 
+	forks = sem_open("/forks", O_CREAT, 0644, all->info.philos_number);
+	print = sem_open("/print", O_CREAT, 0644, 1);
 	i = 0;
+	pid = malloc(sizeof(pid_t) * all->info.philos_number);
+	if (!pid)
+		return ;
 	while (i < all->info.philos_number)
 	{
-		pid = fork();
-		if (!pid)
+		pid[i] = fork();
+		if (pid[i] == 0)
 		{
 			time = timer(0);
-			sem_wait(*print);
-			printf("%zu %ld is sleeping\n", time, i + 1);
-			sem_post(*print);
-			routine(all, i + 1, forks, print);
+			sem_wait(print);
+			printf("%zu %ld is thinking\n", time, i + 1);
+			sem_post(print);
+			routine(all, i, forks, print);
+			exit(0);
 		}
 		else
 			i++;
 	}
+	monitoring(all, print);
+	i = 0;
+	while (i < all->info.philos_number)
+		(waitpid(pid[i], &status, 0), i++);
 }
 
 static void	philo_init(t_all *all)
 {
 	size_t	i;
-	sem_t	*forks;
-	sem_t	*print;
 
 	all->philos = malloc(sizeof(t_philo) * (all->info.philos_number));
 	if (!all->philos)
 		return ;
-	forks = sem_open("/forks", O_CREAT, 0777, all->info.philos_number);
-	print = sem_open("/print", O_CREAT, 0777, 1);
 	i = 0;
 	while (i < all->info.philos_number)
 	{
@@ -136,7 +148,7 @@ static void	philo_init(t_all *all)
 		all->philos[i].info = &all->info;
 		i++;
 	}
-	start_routine(all, &forks, &print);
+	start_routine(all);
 }
 
 static void	data_init(t_all *all, int argc, char **argv)
