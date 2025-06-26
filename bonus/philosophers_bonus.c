@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/26 17:30:00 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:53:34 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,8 @@ static void	data_init(t_all *all, int argc, char **argv)
 {
 	if (argc != 5 && argc != 6)
 		usage_error();
+	sem_unlink("/forks");
+	sem_unlink("/print");
 	all->info.philos_number = check_number(argv[1]);
 	all->info.time_to_die = check_number(argv[2]);
 	all->info.time_to_eat = check_number(argv[3]);
