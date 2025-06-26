@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:58:20 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/26 14:16:13 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/26 14:38:32 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,7 @@ void	philo_eat(size_t philon, t_all *all)
 	if (!all->info.dead_or_finished)
 		printf("%zu %ld is eating\n", time, philon + 1);
 	sem_post(all->info.print);
-	sem_wait(all->info.meal_time);
 	all->philos[philon].last_meal = time;
-	sem_post(all->info.meal_time);
 	ft_sleep(all->info.time_to_eat, all->info);
 	sem_post(all->info.forks);
 	sem_post(all->info.forks);

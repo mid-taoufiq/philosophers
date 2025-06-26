@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/26 14:16:51 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/26 14:38:26 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,7 @@ static bool	dead_part(t_all *all, size_t i)
 	size_t	flag;
 
 	current_time = timer(0);
-	sem_wait(all->info.meal_time);
 	flag = timer(0) - all->philos[i].last_meal;
-	sem_post(all->info.meal_time);
 	if (flag > all->info.time_to_die)
 	{
 		all->info.dead_or_finished = 1;
@@ -97,10 +95,10 @@ static void	start_routine(t_all *all)
 	pid_t	*pid;
 	size_t	time;
 
-	i = 0;
 	pid = malloc(sizeof(pid_t) * all->info.philos_number);
 	if (!pid)
 		return ;
+	i = 0;
 	while (i < all->info.philos_number)
 	{
 		pid[i] = fork();
