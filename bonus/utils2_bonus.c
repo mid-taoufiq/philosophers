@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:58:20 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/25 16:50:14 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/26 10:03:12 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,10 @@
 
 void	philo_take(size_t philon, sem_t *forks, sem_t *print)
 {
-	sem_wait(print);
-	printf("fsdfasf\n");
-	sem_post(print);
+	sem_wait(forks);
 	sem_wait(print);
 	printf("%zu %ld has taken a fork\n", timer(0), philon + 1);
 	sem_post(print);
-	sem_wait(forks);
 	sem_wait(forks);
 	sem_wait(print);
 	printf("%zu %ld has taken a fork\n", timer(0), philon + 1);
