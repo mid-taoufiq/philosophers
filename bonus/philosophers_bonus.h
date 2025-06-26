@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/26 14:07:34 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:13:16 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	usage_error(void);
 int		check_number(char *str);
 size_t	timer(int start);
 void	ft_sleep(size_t time, t_info info);
-void	monitoring(t_all *all);
+// void	monitoring(t_all *all);
 void	philo_take(size_t philon, t_all *all);
 void	philo_eat(size_t philon, t_all *all);
 void	philo_sleep(size_t philon, t_all *all);

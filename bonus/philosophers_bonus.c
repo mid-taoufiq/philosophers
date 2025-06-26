@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/26 14:38:26 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:27:12 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,40 +42,21 @@
 // 	return (false);
 // }
 
-static bool	dead_part(t_all *all, size_t i)
+static void	dead_part(t_all *all, size_t i)
 {
 	size_t	current_time;
 	size_t	flag;
 
 	current_time = timer(0);
-	flag = timer(0) - all->philos[i].last_meal;
+	flag = current_time - all->philos[i].last_meal;
 	if (flag > all->info.time_to_die)
 	{
 		all->info.dead_or_finished = 1;
 		sem_wait(all->info.print);
 		printf("%zu %lu died\n", current_time, i + 1);
 		sem_post(all->info.print);
-		return (true);
+		exit(0);
 	}
-	return (false);
-}
-
-void	monitoring(t_all *all)
-{
-	size_t	i;
-
-	while (1)
-	{
-		usleep(10);
-		i = 0;
-		while (i < all->info.philos_number)
-		{
-			if (dead_part(all, i))
-				return ;
-			i++;
-		}
-	}
-	return ;
 }
 
 static void	routine(t_all *all, size_t philon)
@@ -85,8 +66,8 @@ static void	routine(t_all *all, size_t philon)
 		philo_take(philon, all);
 		philo_eat(philon, all);
 		philo_sleep(philon, all);
+		dead_part(all, philon);
 	}
-	exit(0);
 }
 
 static void	start_routine(t_all *all)
@@ -95,10 +76,10 @@ static void	start_routine(t_all *all)
 	pid_t	*pid;
 	size_t	time;
 
+	i = 0;
 	pid = malloc(sizeof(pid_t) * all->info.philos_number);
 	if (!pid)
 		return ;
-	i = 0;
 	while (i < all->info.philos_number)
 	{
 		pid[i] = fork();
@@ -115,7 +96,6 @@ static void	start_routine(t_all *all)
 		else
 			i++;
 	}
-	monitoring(all);
 	for (i = 0; i < all->info.philos_number; i++)
 		kill(pid[i], SIGKILL);
 	sem_unlink("/forks");
