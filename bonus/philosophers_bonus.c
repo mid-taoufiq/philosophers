@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/26 15:27:12 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:54:34 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,22 +42,44 @@
 // 	return (false);
 // }
 
-static void	dead_part(t_all *all, size_t i)
+static bool	dead_part(t_all *all, size_t i)
 {
 	size_t	current_time;
 	size_t	flag;
 
 	current_time = timer(0);
-	flag = current_time - all->philos[i].last_meal;
+	sem_wait(all->info.meal_time);
+	flag = timer(0) - all->philos[i].last_meal;
+	sem_post(all->info.meal_time);
 	if (flag > all->info.time_to_die)
 	{
 		all->info.dead_or_finished = 1;
 		sem_wait(all->info.print);
 		printf("%zu %lu died\n", current_time, i + 1);
 		sem_post(all->info.print);
-		exit(0);
+		return (true);
 	}
+	return (false);
 }
+
+void	monitoring(t_all *all)
+{
+	size_t	i;
+
+	while (1)
+	{
+		usleep(10);
+		i = 0;
+		while (i < all->info.philos_number)
+		{
+			if (dead_part(all, i))
+				return ;
+			i++;
+		}
+	}
+	return ;
+}
+
 
 static void	routine(t_all *all, size_t philon)
 {
@@ -96,6 +118,7 @@ static void	start_routine(t_all *all)
 		else
 			i++;
 	}
+	monitoring(all);
 	for (i = 0; i < all->info.philos_number; i++)
 		kill(pid[i], SIGKILL);
 	sem_unlink("/forks");
