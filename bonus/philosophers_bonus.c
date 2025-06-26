@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/26 19:53:34 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/26 20:45:34 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,25 @@
 // 	return (false);
 // }
 
-static bool	dead_part(t_philo *philo)
+static void	dead_part(t_philo *philo)
 {
 	size_t	current_time;
 	size_t	flag;
 
 	current_time = timer(0);
 	sem_wait(philo->info->meal_time);
-	flag = timer(0) - philo->last_meal;
+	flag = current_time - philo->last_meal;
 	sem_post(philo->info->meal_time);
 	if (flag > philo->info->time_to_die)
 	{
+		sem_wait(philo->info->meal_time);
 		philo->info->dead_or_finished = 1;
+		sem_post(philo->info->meal_time);
 		sem_wait(philo->info->print);
 		printf("%zu %d died\n", current_time, philo->id);
 		sem_post(philo->info->print);
-		return (true);
+		exit(0);
 	}
-	return (false);
 }
 
 void	*monitoring(void *arg)
@@ -70,8 +71,7 @@ void	*monitoring(void *arg)
 	while (1)
 	{
 		usleep(10);
-		if (dead_part(philo))
-			return (NULL);
+		dead_part(philo);
 	}
 	return (NULL);
 }
@@ -82,7 +82,7 @@ static void	routine(t_all *all, size_t philon)
 
 	if (pthread_create(&monitor, NULL, monitoring, &all->philos[philon]) == -1)
 		return ;
-	while (!all->info.dead_or_finished)
+	while (!check_dead_fin(all))
 	{
 		philo_take(philon, all);
 		philo_eat(philon, all);
@@ -91,12 +91,24 @@ static void	routine(t_all *all, size_t philon)
 	pthread_join(monitor, NULL);
 }
 
+bool	check_dead_fin(t_all *all)
+{
+	sem_wait(all->info.endflag);
+	if (!all->info.dead_or_finished)
+	{
+		sem_post(all->info.endflag);
+		return (false);
+	}
+	sem_post(all->info.endflag);
+	return (true);
+}
+
 static void	start_routine(t_all *all)
 {
 	size_t	i;
 	pid_t	*pid;
 	size_t	time;
-	int status;
+	int		status;
 
 	i = 0;
 	pid = malloc(sizeof(pid_t) * all->info.philos_number);
@@ -108,10 +120,12 @@ static void	start_routine(t_all *all)
 		if (pid[i] == 0)
 		{
 			time = timer(0);
-			sem_wait(all->info.print);
-			if (!all->info.dead_or_finished)
+			if (!check_dead_fin(all))
+			{
+				sem_wait(all->info.print);
 				printf("%zu %ld is thinking\n", time, i + 1);
-			sem_post(all->info.print);
+				sem_post(all->info.print);
+			}
 			routine(all, i);
 			exit(0);
 		}
@@ -123,8 +137,13 @@ static void	start_routine(t_all *all)
 		kill(pid[i], SIGKILL);
 	sem_unlink("/forks");
 	sem_unlink("/print");
+	sem_unlink("/meal_time");
+	sem_unlink("/endflag");
 	sem_close(all->info.forks);
 	sem_close(all->info.print);
+	sem_close(all->info.meal_time);
+	sem_close(all->info.endflag);
+
 }
 
 static void	philo_init(t_all *all)
@@ -153,13 +172,17 @@ static void	data_init(t_all *all, int argc, char **argv)
 		usage_error();
 	sem_unlink("/forks");
 	sem_unlink("/print");
+	sem_unlink("/meal_time");
+	sem_unlink("/endflag");
 	all->info.philos_number = check_number(argv[1]);
 	all->info.time_to_die = check_number(argv[2]);
 	all->info.time_to_eat = check_number(argv[3]);
 	all->info.time_to_sleep = check_number(argv[4]);
-	all->info.forks = sem_open("/forks", O_CREAT, 0644, all->info.philos_number);
+	all->info.forks = sem_open("/forks", O_CREAT,
+			0644, all->info.philos_number);
 	all->info.print = sem_open("/print", O_CREAT, 0644, 1);
 	all->info.meal_time = sem_open("/meal_time", O_CREAT, 0644, 1);
+	all->info.endflag = sem_open("/endflag", O_CREAT, 0644, 1);
 	if (argc == 6)
 		all->info.times_philo_must_eat = check_number(argv[5]);
 	else

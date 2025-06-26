@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:58:20 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/26 17:23:29 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/26 20:38:43 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,19 @@
 void	philo_take(size_t philon, t_all *all)
 {
 	sem_wait(all->info.forks);
-	sem_wait(all->info.print);
-	if (!all->info.dead_or_finished)
+	if (!check_dead_fin(all))
+	{
+		sem_wait(all->info.print);
 		printf("%zu %ld has taken a fork\n", timer(0), philon + 1);
-	sem_post(all->info.print);
+		sem_post(all->info.print);
+	}
 	sem_wait(all->info.forks);
-	sem_wait(all->info.print);
-	if (!all->info.dead_or_finished)
+	if (!check_dead_fin(all))
+	{
+		sem_wait(all->info.print);
 		printf("%zu %ld has taken a fork\n", timer(0), philon + 1);
-	sem_post(all->info.print);
+		sem_post(all->info.print);
+	}
 }
 
 void	philo_eat(size_t philon, t_all *all)
@@ -31,11 +35,15 @@ void	philo_eat(size_t philon, t_all *all)
 	size_t	time;
 
 	time = timer(0);
-	sem_wait(all->info.print);
-	if (!all->info.dead_or_finished)
+	if (!check_dead_fin(all))
+	{
+		sem_wait(all->info.print);
 		printf("%zu %ld is eating\n", time, philon + 1);
-	sem_post(all->info.print);
+		sem_post(all->info.print);
+	}
+	sem_wait(all->info.meal_time);
 	all->philos[philon].last_meal = time;
+	sem_post(all->info.meal_time);
 	ft_sleep(all->info.time_to_eat, all->info);
 	sem_post(all->info.forks);
 	sem_post(all->info.forks);
@@ -44,9 +52,11 @@ void	philo_eat(size_t philon, t_all *all)
 
 void	philo_sleep(size_t philon, t_all *all)
 {
-	sem_wait(all->info.print);
-	if (all->info.dead_or_finished == 0)
+	if (check_dead_fin(all) == 0)
+	{
+		sem_wait(all->info.print);
 		printf("%zu %ld is sleeping\n", timer(0), philon + 1);
-	sem_post(all->info.print);
+		sem_post(all->info.print);
+	}
 	ft_sleep(all->info.time_to_sleep, all->info);
 }
