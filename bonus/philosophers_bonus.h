@@ -6,13 +6,15 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/26 15:13:16 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:36:48 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHERS_BONUS_H
 # define PHILOSOPHERS_BONUS_H
-#include <signal.h>
+
+# include <pthread.h>
+# include <signal.h>
 # include <limits.h>
 # include <stdio.h>
 # include <stdbool.h>
@@ -43,6 +45,7 @@ typedef struct s_philo
 	int		finished;
 	size_t	meals_eaten;
 	size_t	last_meal;
+	t_info	*info;
 }	t_philo;
 
 typedef struct s_all
