@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/26 17:11:07 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:30:00 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static void	start_routine(t_all *all)
 	size_t	i;
 	pid_t	*pid;
 	size_t	time;
-	// int		status;
+	int status;
 
 	i = 0;
 	pid = malloc(sizeof(pid_t) * all->info.philos_number);
@@ -118,6 +118,7 @@ static void	start_routine(t_all *all)
 		else
 			i++;
 	}
+	waitpid(-1, &status, 0);
 	for (i = 0; i < all->info.philos_number; i++)
 		kill(pid[i], SIGKILL);
 	sem_unlink("/forks");
