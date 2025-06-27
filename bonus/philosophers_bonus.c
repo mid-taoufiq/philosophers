@@ -70,9 +70,9 @@ void	*monitoring(void *arg)
 	philo = arg;
 	while (1)
 	{
-		usleep(10);
 		if (dead_part(philo))
 			return (NULL);
+		usleep(1000);
 	}
 	return (NULL);
 }
@@ -134,7 +134,6 @@ static void	start_routine(t_all *all)
 	i = 0;
 	while (i < all->info.philos_number)
 		kill(pid[i++], SIGKILL);
-	sem_post(all->info.print);
 	sem_close(all->info.forks);
 	sem_close(all->info.print);
 	sem_close(all->info.meal_time);
