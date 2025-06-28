@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/28 11:21:36 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/28 16:33:37 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,8 @@ static void	start_routine(t_all *all)
 		pid[i] = fork();
 		if (pid[i] == 0)
 		{
-			if ((i + 1) % 2 == 0)
-				usleep(100);
+			if (all->philos[i].id % 2 != 0)
+				usleep(300);
 			routine(all, i);
 		}
 		else
@@ -137,12 +137,16 @@ static void	start_routine(t_all *all)
 	wait(&status);
 	i = 0;
 	while (i < all->info.philos_number)
-		kill(pid[i++], SIGKILL);
+	{
+		kill(pid[i], SIGKILL);
+		i++;
+	}
 	sem_post(all->info.print);
 	sem_close(all->info.forks);
 	sem_close(all->info.print);
 	sem_close(all->info.meal_time);
 	sem_close(all->info.endflag);
+	sem_close(all->info.wait);
 }
 
 static void	philo_init(t_all *all)
@@ -178,10 +182,12 @@ static void	data_init(t_all *all, int argc, char **argv)
 	all->info.print = sem_open("/print", O_CREAT, 0644, 1);
 	all->info.meal_time = sem_open("/meal_time", O_CREAT, 0644, 1);
 	all->info.endflag = sem_open("/endflag", O_CREAT, 0644, 1);
+	all->info.wait = sem_open("/wait", O_CREAT, 0644, 1);
 	sem_unlink("/forks");
 	sem_unlink("/print");
 	sem_unlink("/meal_time");
 	sem_unlink("/endflag");
+	sem_unlink("/wait");
 	if (argc == 6)
 		all->info.times_philo_must_eat = check_number(argv[5]);
 	else

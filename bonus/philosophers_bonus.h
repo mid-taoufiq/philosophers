@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/26 20:29:24 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/28 11:32:47 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_info
 	sem_t	*print;
 	sem_t	*meal_time;
 	sem_t	*endflag;
+	sem_t	*wait;
 }	t_info;
 
 typedef struct s_philo

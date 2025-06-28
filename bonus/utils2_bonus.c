@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:58:20 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/26 20:38:43 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/28 16:35:03 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,14 @@
 
 void	philo_take(size_t philon, t_all *all)
 {
+	sem_wait(all->info.print);
 	sem_wait(all->info.forks);
-	if (!check_dead_fin(all))
-	{
-		sem_wait(all->info.print);
-		printf("%zu %ld has taken a fork\n", timer(0), philon + 1);
-		sem_post(all->info.print);
-	}
+	printf("%zu %ld has taken a fork\n", timer(0), philon + 1);
+	sem_post(all->info.print);
+	sem_wait(all->info.print);
 	sem_wait(all->info.forks);
-	if (!check_dead_fin(all))
-	{
-		sem_wait(all->info.print);
-		printf("%zu %ld has taken a fork\n", timer(0), philon + 1);
-		sem_post(all->info.print);
-	}
+	printf("%zu %ld has taken a fork\n", timer(0), philon + 1);
+	sem_post(all->info.print);
 }
 
 void	philo_eat(size_t philon, t_all *all)
