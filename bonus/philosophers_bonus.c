@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/27 17:49:34 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/28 11:21:36 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,11 @@ static void	start_routine(t_all *all)
 	{
 		pid[i] = fork();
 		if (pid[i] == 0)
+		{
+			if ((i + 1) % 2 == 0)
+				usleep(100);
 			routine(all, i);
+		}
 		else
 			i++;
 	}
@@ -134,6 +138,7 @@ static void	start_routine(t_all *all)
 	i = 0;
 	while (i < all->info.philos_number)
 		kill(pid[i++], SIGKILL);
+	sem_post(all->info.print);
 	sem_close(all->info.forks);
 	sem_close(all->info.print);
 	sem_close(all->info.meal_time);
