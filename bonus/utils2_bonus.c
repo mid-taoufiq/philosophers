@@ -14,6 +14,7 @@
 
 void	philo_take(size_t philon, t_all *all)
 {
+	sem_wait(all->info.wait);
 	sem_wait(all->info.print);
 	sem_wait(all->info.forks);
 	printf("%zu %ld has taken a fork\n", timer(0), philon + 1);
@@ -22,6 +23,7 @@ void	philo_take(size_t philon, t_all *all)
 	sem_wait(all->info.forks);
 	printf("%zu %ld has taken a fork\n", timer(0), philon + 1);
 	sem_post(all->info.print);
+	sem_post(all->info.wait);
 }
 
 void	philo_eat(size_t philon, t_all *all)

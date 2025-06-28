@@ -127,7 +127,7 @@ static void	start_routine(t_all *all)
 		pid[i] = fork();
 		if (pid[i] == 0)
 		{
-			if (all->philos[i].id % 2 != 0)
+			if (all->philos[i].id % 2 == 0)
 				usleep(300);
 			routine(all, i);
 		}
