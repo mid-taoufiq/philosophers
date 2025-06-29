@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/29 14:06:15 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/29 16:12:37 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	start_routine(t_all *all)
 		else if (pid[i] < 0)
 		{
 			sem_wait(all->info.print);
-			ft_putstr("fork failed", 2);
+			ft_putstr_fd("fork failed", 2);
 			sem_post(all->info.print);
 			exit(0);
 		}

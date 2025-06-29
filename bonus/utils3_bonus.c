@@ -6,11 +6,11 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 14:04:52 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/29 14:05:06 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/29 16:14:30 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosophers.h"
+#include "philosophers_bonus.h"
 
 void	ft_putstr_fd(char *s, int fd)
 {
@@ -21,7 +21,7 @@ void	ft_putstr_fd(char *s, int fd)
 	i = 0;
 	while (s[i])
 	{
-		ft_putchar_fd(s[i], fd);
+		write(fd, &s[i], 1);
 		i++;
 	}
 }
