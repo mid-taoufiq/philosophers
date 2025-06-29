@@ -14,6 +14,8 @@ SRC =	./mandatory/philosophers.c \
 BONUS =	./bonus/philosophers_bonus.c \
 		./bonus/utils_bonus.c \
 		./bonus/utils2_bonus.c \
+		./bonus/utils3_bonus.c \
+		./bonus/routine_bonus.c
 
 OBJ = ${SRC:.c=.o}
 BOBJ = $(BONUS:.c=.o)

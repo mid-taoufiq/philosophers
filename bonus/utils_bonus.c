@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/14 14:40:56 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/29 10:40:35 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,14 @@ int	check_number(char *str)
 	return (value);
 }
 
-void	ft_sleep(size_t time, t_info info)
+void	ft_sleep(size_t time, t_all *all)
 {
 	size_t	start;
 
 	start = timer(0);
 	while (timer(0) - start < time)
 	{
-		if (info.dead_or_finished)
+		if (check_dead_fin(all))
 			break ;
 		usleep(400);
 	}

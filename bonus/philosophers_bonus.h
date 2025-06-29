@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/28 11:32:47 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/29 14:05:21 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <semaphore.h>
 # include <fcntl.h>
 # include <sys/stat.h>
- #include <sys/wait.h>
+# include <sys/wait.h>
 
 typedef struct s_info
 {
@@ -44,9 +44,9 @@ typedef struct s_info
 typedef struct s_philo
 {
 	int		id;
-	int		finished;
 	size_t	meals_eaten;
 	size_t	last_meal;
+	bool	finished;
 	t_info	*info;
 }	t_philo;
 
@@ -60,11 +60,13 @@ int		ft_atoi(char *nb, int *success);
 void	usage_error(void);
 int		check_number(char *str);
 size_t	timer(int start);
-void	ft_sleep(size_t time, t_info info);
+void	ft_sleep(size_t time, t_all *all);
+void	ft_putstr_fd(char *s, int fd);
 bool	check_dead_fin(t_all *all);
-// void	monitoring(t_all *all);
+void	action_printer(size_t id, t_all *all, char *action);
 void	philo_take(size_t philon, t_all *all);
 void	philo_eat(size_t philon, t_all *all);
 void	philo_sleep(size_t philon, t_all *all);
+void	routine(t_all *all, size_t i);
 
 #endif
