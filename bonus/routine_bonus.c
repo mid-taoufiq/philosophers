@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 13:42:26 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/29 13:54:27 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/30 14:52:31 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ static void	dead_part(t_philo *philo)
 	sem_post(philo->info->meal_time);
 	if (flag > philo->info->time_to_die)
 	{
+		sem_wait(philo->info->print);
+		printf("%zu %d died\n", current_time, philo->id);
 		sem_wait(philo->info->meal_time);
 		philo->info->dead_or_finished = 1;
 		sem_post(philo->info->meal_time);
-		sem_wait(philo->info->print);
-		printf("%zu %d died\n", current_time, philo->id);
 		exit(0);
 	}
 }
@@ -67,7 +67,7 @@ void	routine(t_all *all, size_t i)
 			if (!all->philos[i].finished)
 			{
 				all->philos[i].finished = true;
-				sem_post(all->info.wait);
+				sem_post(all->info.wait_finished);
 			}
 		}
 	}

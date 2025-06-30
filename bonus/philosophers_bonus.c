@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/29 16:12:37 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/30 17:08:53 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,17 @@
 static void	start_routine(t_all *all)
 {
 	size_t	i;
-	pid_t	*pid;
 	int		status;
 
 	timer(1);
-	i = 0;
-	pid = malloc(sizeof(pid_t) * all->info.philos_number);
-	if (!pid)
+	if (create_children(all) == -1)
 		return ;
-	while (i < all->info.philos_number)
-	{
-		pid[i] = fork();
-		if (pid[i] == 0)
-			routine(all, i);
-		else if (pid[i] < 0)
-		{
-			sem_wait(all->info.print);
-			ft_putstr_fd("fork failed", 2);
-			sem_post(all->info.print);
-			exit(0);
-		}
-		i++;
-	}
 	if (all->info.times_philo_must_eat > 0)
 	{
 		i = 0;
 		while (i < all->info.philos_number)
 		{
-			sem_wait(all->info.wait);
+			sem_wait(all->info.wait_finished);
 			i++;
 		}
 	}
@@ -51,15 +34,11 @@ static void	start_routine(t_all *all)
 	i = 0;
 	while (i < all->info.philos_number)
 	{
-		kill(pid[i], SIGKILL);
+		kill(all->info.pid[i], SIGKILL);
 		i++;
 	}
 	sem_post(all->info.print);
-	sem_close(all->info.forks);
-	sem_close(all->info.print);
-	sem_close(all->info.meal_time);
-	sem_close(all->info.endflag);
-	sem_close(all->info.wait);
+	close_sems(all);
 }
 
 static void	philo_init(t_all *all)
@@ -79,40 +58,30 @@ static void	philo_init(t_all *all)
 		all->philos[i].info = &all->info;
 		i++;
 	}
-	start_routine(all);
 }
 
 static void	data_init(t_all *all, int argc, char **argv)
 {
-	if (argc != 5 && argc != 6)
-		usage_error();
 	all->info.philos_number = check_number(argv[1]);
 	all->info.time_to_die = check_number(argv[2]);
 	all->info.time_to_eat = check_number(argv[3]);
 	all->info.time_to_sleep = check_number(argv[4]);
-	all->info.forks = sem_open("/forks", O_CREAT,
-			0644, all->info.philos_number);
-	all->info.print = sem_open("/print", O_CREAT, 0644, 1);
-	all->info.meal_time = sem_open("/meal_time", O_CREAT, 0644, 1);
-	all->info.endflag = sem_open("/endflag", O_CREAT, 0644, 1);
-	all->info.wait = sem_open("/wait", O_CREAT, 0644, 1);
-	sem_unlink("/forks");
-	sem_unlink("/print");
-	sem_unlink("/meal_time");
-	sem_unlink("/endflag");
-	sem_unlink("/wait");
+	all->info.dead_or_finished = 0;
 	if (argc == 6)
 		all->info.times_philo_must_eat = check_number(argv[5]);
 	else
 		all->info.times_philo_must_eat = 0;
-	all->info.dead_or_finished = 0;
+	sems_create(all);
 }
 
 int	main(int argc, char **argv)
 {
 	t_all	all;
 
+	if (argc != 5 && argc != 6)
+		usage_error();
 	data_init(&all, argc, argv);
 	philo_init(&all);
+	start_routine(&all);
 	return (0);
 }

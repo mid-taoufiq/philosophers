@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/29 14:05:21 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/06/30 17:09:55 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,12 @@ typedef struct s_info
 	size_t	time_to_eat;
 	size_t	time_to_sleep;
 	size_t	times_philo_must_eat;
+	pid_t	*pid;
 	sem_t	*forks;
 	sem_t	*print;
 	sem_t	*meal_time;
 	sem_t	*endflag;
-	sem_t	*wait;
+	sem_t	*wait_finished;
 }	t_info;
 
 typedef struct s_philo
@@ -68,5 +69,8 @@ void	philo_take(size_t philon, t_all *all);
 void	philo_eat(size_t philon, t_all *all);
 void	philo_sleep(size_t philon, t_all *all);
 void	routine(t_all *all, size_t i);
+void	sems_create(t_all *all);
+void	close_sems(t_all *all);
+int		create_children(t_all *all);
 
 #endif
