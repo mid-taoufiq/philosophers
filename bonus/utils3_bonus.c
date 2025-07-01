@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 14:04:52 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/30 17:09:35 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/01 20:47:49 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,12 @@ int	create_children(t_all *all)
 	return (0);
 }
 
-void	close_sems(t_all *all)
+void	close_sems(t_info *info)
 {
-	sem_close(all->info.forks);
-	sem_close(all->info.print);
-	sem_close(all->info.meal_time);
-	sem_close(all->info.endflag);
-	sem_close(all->info.wait_finished);
+	sem_close(info->forks);
+	sem_close(info->print);
+	sem_close(info->meal_time);
+	sem_close(info->wait_finished);
 }
 
 void	sems_create(t_all *all)
@@ -60,9 +59,6 @@ void	sems_create(t_all *all)
 	all->info.meal_time = sem_open("/meal_time", O_CREAT, 0644, 1);
 	if (all->info.meal_time == SEM_FAILED)
 		(sem_unlink("/meal_time"), sem_close(all->info.meal_time), exit(1));
-	all->info.endflag = sem_open("/endflag", O_CREAT, 0644, 1);
-	if (all->info.endflag == SEM_FAILED)
-		(sem_unlink("/endflag"), sem_close(all->info.endflag), exit(1));
 	all->info.wait_finished = sem_open("/wait_finished", O_CREAT, 0644, 1);
 	if (all->info.wait_finished == SEM_FAILED)
 		(sem_unlink("/wait_finished"),

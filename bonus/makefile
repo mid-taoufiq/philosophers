@@ -2,7 +2,7 @@ NAME = philo_bonus
 
 HEADER = philosophers_bonus.h
 
-FLAGS = -Wall -Wextra -Werror 
+FLAGS = -Wall -Wextra -Werror -g3
 
 SRC =	philosophers_bonus.c \
 		utils_bonus.c \
@@ -13,7 +13,6 @@ SRC =	philosophers_bonus.c \
 OBJ = ${SRC:.c=.o}
 
 all: ${NAME}
-	make clean
 
 ${NAME}: ${OBJ}
 	cc ${FLAGS} ${OBJ} -o $@

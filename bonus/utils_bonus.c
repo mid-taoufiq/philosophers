@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/29 10:40:35 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/01 20:45:50 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,13 @@ int	check_number(char *str)
 	return (value);
 }
 
-void	ft_sleep(size_t time, t_all *all)
+void	ft_sleep(size_t time)
 {
 	size_t	start;
 
 	start = timer(0);
 	while (timer(0) - start < time)
-	{
-		if (check_dead_fin(all))
-			break ;
-		usleep(400);
-	}
+		usleep(50);
 }
 
 size_t	timer(int start)

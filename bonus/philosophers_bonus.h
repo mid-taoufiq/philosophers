@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/30 17:09:55 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/01 20:48:01 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,15 @@ int		ft_atoi(char *nb, int *success);
 void	usage_error(void);
 int		check_number(char *str);
 size_t	timer(int start);
-void	ft_sleep(size_t time, t_all *all);
+void	ft_sleep(size_t time);
 void	ft_putstr_fd(char *s, int fd);
-bool	check_dead_fin(t_all *all);
 void	action_printer(size_t id, t_all *all, char *action);
-void	philo_take(size_t philon, t_all *all);
-void	philo_eat(size_t philon, t_all *all);
-void	philo_sleep(size_t philon, t_all *all);
+void	philo_take(size_t id, t_all *all);
+void	philo_eat(size_t id, t_all *all, t_philo *philo);
+void	philo_sleep(size_t id, t_all *all);
 void	routine(t_all *all, size_t i);
 void	sems_create(t_all *all);
-void	close_sems(t_all *all);
+void	close_sems(t_info *info);
 int		create_children(t_all *all);
 
 #endif

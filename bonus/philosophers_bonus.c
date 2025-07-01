@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/30 17:08:53 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/01 20:03:45 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,26 +38,8 @@ static void	start_routine(t_all *all)
 		i++;
 	}
 	sem_post(all->info.print);
-	close_sems(all);
-}
-
-static void	philo_init(t_all *all)
-{
-	size_t	i;
-
-	all->philos = malloc(sizeof(t_philo) * (all->info.philos_number));
-	if (!all->philos)
-		return ;
-	i = 0;
-	while (i < all->info.philos_number)
-	{
-		all->philos[i].id = i + 1;
-		all->philos[i].finished = 0;
-		all->philos[i].meals_eaten = 0;
-		all->philos[i].last_meal = 0;
-		all->philos[i].info = &all->info;
-		i++;
-	}
+	close_sems(&all->info);
+	free(all->info.pid);
 }
 
 static void	data_init(t_all *all, int argc, char **argv)
@@ -81,7 +63,6 @@ int	main(int argc, char **argv)
 	if (argc != 5 && argc != 6)
 		usage_error();
 	data_init(&all, argc, argv);
-	philo_init(&all);
 	start_routine(&all);
 	return (0);
 }

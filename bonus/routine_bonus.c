@@ -6,28 +6,51 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 13:42:26 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/30 14:52:31 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/01 20:48:39 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
 
+static void	init_philo(t_philo *philo, t_all *all, size_t i)
+{
+	philo->id = i + 1;
+	philo->finished = false;
+	philo->info = &all->info;
+	philo->last_meal = 0;
+	philo->meals_eaten = 0;
+}
+
+static void	post_remainings(t_philo *philo)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < philo->info->philos_number)
+	{
+		if (sem_post(philo->info->wait_finished) != 0)
+			break ;
+		i++;
+	}
+}
+
 static void	dead_part(t_philo *philo)
 {
-	size_t	current_time;
 	size_t	flag;
 
-	current_time = timer(0);
 	sem_wait(philo->info->meal_time);
-	flag = current_time - philo->last_meal;
+	flag = timer(0) - philo->last_meal;
 	sem_post(philo->info->meal_time);
 	if (flag > philo->info->time_to_die)
 	{
 		sem_wait(philo->info->print);
-		printf("%zu %d died\n", current_time, philo->id);
+		printf("%zu %d died\n", timer(0), philo->id);
 		sem_wait(philo->info->meal_time);
 		philo->info->dead_or_finished = 1;
 		sem_post(philo->info->meal_time);
+		post_remainings(philo);
+		free(philo->info->pid);
+		close_sems(philo->info);
 		exit(0);
 	}
 }
@@ -39,8 +62,8 @@ static void	*monitoring(void *arg)
 	philo = arg;
 	while (1)
 	{
+		usleep(100);
 		dead_part(philo);
-		usleep(1000);
 	}
 	return (NULL);
 }
@@ -48,25 +71,25 @@ static void	*monitoring(void *arg)
 void	routine(t_all *all, size_t i)
 {
 	pthread_t	monitor;
+	t_philo		philo;
 
-	if (pthread_create(&monitor, NULL, monitoring, &all->philos[i]) == -1)
+	init_philo(&philo, all, i);
+	if (pthread_create(&monitor, NULL, monitoring, &philo) == -1)
 		return ;
 	pthread_detach(monitor);
-	if (all->philos[i].id % 2 == 0)
+	if (philo.id % 2 == 0)
 		usleep(300);
-	while (!check_dead_fin(all))
+	while (1)
 	{
-		if (!check_dead_fin(all))
-			action_printer(i + 1, all, "is thinking");
-		philo_take(i + 1, all);
-		philo_eat(i + 1, all);
-		philo_sleep(i + 1, all);
-		if (all->info.times_philo_must_eat > 0 &&
-			all->philos[i].meals_eaten >= all->info.times_philo_must_eat)
+		action_printer(philo.id, all, "is thinking");
+		(philo_take(philo.id, all), philo_eat(philo.id, all, &philo));
+		philo_sleep(philo.id, all);
+		if (all->info.times_philo_must_eat > 0
+			&& philo.meals_eaten >= all->info.times_philo_must_eat)
 		{
-			if (!all->philos[i].finished)
+			if (!philo.finished)
 			{
-				all->philos[i].finished = true;
+				philo.finished = true;
 				sem_post(all->info.wait_finished);
 			}
 		}
