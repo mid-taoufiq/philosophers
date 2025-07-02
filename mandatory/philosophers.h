@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/02 12:57:50 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/02 19:03:58 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ typedef struct s_info
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
 	size_t			times_philo_must_eat;
-	pthread_mutex_t	i;
 	pthread_mutex_t	print;
 	pthread_mutex_t	endflag;
 	pthread_mutex_t	time;

@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:18:52 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/02 14:32:27 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/02 20:50:23 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,10 @@ static bool	finished_part(t_all *all, size_t i)
 
 static bool	dead_part(t_all *all, size_t i)
 {
-	size_t	current_time;
 	size_t	flag;
 
-	current_time = timer(0);
 	pthread_mutex_lock(&all->info.meals_mutex);
-	flag = current_time - all->philos[i].last_meal;
+	flag = timer(0) - all->philos[i].last_meal;
 	pthread_mutex_unlock(&all->info.meals_mutex);
 	if (flag > all->info.time_to_die)
 	{
@@ -61,7 +59,7 @@ static bool	dead_part(t_all *all, size_t i)
 		all->info.dead_or_finished = 1;
 		pthread_mutex_unlock(&all->info.endflag);
 		pthread_mutex_lock(&all->info.print);
-		printf("%zu %lu died\n", current_time, i + 1);
+		printf("%zu %lu died\n", timer(0), i + 1);
 		pthread_mutex_unlock(&all->info.print);
 		return (true);
 	}
@@ -76,6 +74,7 @@ void	*monitoring(void *arg)
 	all = arg;
 	while (1)
 	{
+		usleep(1000);
 		i = 0;
 		while (i < all->info.philos_number)
 		{
@@ -88,7 +87,6 @@ void	*monitoring(void *arg)
 			}
 			i++;
 		}
-		usleep(1000);
 	}
 	return (0);
 }

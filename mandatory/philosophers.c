@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/02 15:52:14 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/02 20:40:29 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,15 @@ static void	philo_init(t_all *all)
 	while (i < all->info.philos_number)
 	{
 		all->philos[i].id = i + 1;
-		all->philos[i].meals_eaten = 0;
 		all->philos[i].left_fork = &all->info.forks[i];
 		all->philos[i].right_fork = &all->info.forks[
 			(i + 1) % all->info.philos_number];
 		all->philos[i].info = &all->info;
 		all->philos[i].finished = 0;
+		pthread_mutex_lock(&all->info.meals_mutex);
+		all->philos[i].meals_eaten = 0;
+		all->philos[i].last_meal = timer(0);
+		pthread_mutex_unlock(&all->info.meals_mutex);
 		i++;
 	}
 	start_routine(all);

@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/14 14:40:56 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/02 18:09:00 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	ft_sleep(size_t time, t_philo *philo)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->info->endflag);
-		usleep(400);
+		usleep(100);
 	}
 }
 
