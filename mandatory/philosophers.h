@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/14 12:03:58 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/02 12:57:50 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,9 @@ void	usage_error(void);
 int		check_number(char *str);
 void	*routine(void *arg);
 size_t	timer(int start);
-void	timer_mutex(t_philo *philo, size_t *time);
 void	ft_sleep(size_t time, t_philo *philo);
 void	*monitoring(void *arg);
-void	action_printer(int option, size_t *time, int id, t_philo *philo);
+void	action_printer(char *action, int id, t_philo *philo);
 int		mutex_init(t_all *all);
 void	unlock_mutexes(t_philo *philo);
 

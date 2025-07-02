@@ -6,47 +6,47 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:16:00 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/18 15:11:40 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/02 14:02:41 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static void	even_eat_sleep(t_philo *philo, size_t time)
+static void	even_eat_sleep(t_philo *philo)
 {
 	pthread_mutex_lock(philo->right_fork);
-	action_printer(1, &time, philo->id, philo);
+	action_printer("has taken a fork", philo->id, philo);
 	pthread_mutex_lock(philo->left_fork);
-	action_printer(1, &time, philo->id, philo);
-	action_printer(2, &time, philo->id, philo);
+	action_printer("has taken a fork", philo->id, philo);
+	action_printer("is eating", philo->id, philo);
 	pthread_mutex_lock(&philo->info->meals_mutex);
-	philo->last_meal = time;
+	philo->last_meal = timer(0);
 	pthread_mutex_unlock(&philo->info->meals_mutex);
 	ft_sleep(philo->info->time_to_eat, philo);
 	pthread_mutex_lock(&philo->info->meals_mutex);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->info->meals_mutex);
 	unlock_mutexes(philo);
-	action_printer(3, &time, philo->id, philo);
+	action_printer("is sleeping", philo->id, philo);
 	ft_sleep(philo->info->time_to_sleep, philo);
 }
 
-static void	odd_eat_sleep(t_philo *philo, size_t time)
+static void	odd_eat_sleep(t_philo *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
-	action_printer(1, &time, philo->id, philo);
+	action_printer("has taken a fork", philo->id, philo);
 	pthread_mutex_lock(philo->right_fork);
-	action_printer(1, &time, philo->id, philo);
-	action_printer(2, &time, philo->id, philo);
+	action_printer("has taken a fork", philo->id, philo);
+	action_printer("is eating", philo->id, philo);
 	pthread_mutex_lock(&philo->info->meals_mutex);
-	philo->last_meal = time;
+	philo->last_meal = timer(0);
 	pthread_mutex_unlock(&philo->info->meals_mutex);
 	ft_sleep(philo->info->time_to_eat, philo);
 	pthread_mutex_lock(&philo->info->meals_mutex);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->info->meals_mutex);
 	unlock_mutexes(philo);
-	action_printer(3, &time, philo->id, philo);
+	action_printer("is sleeping", philo->id, philo);
 	ft_sleep(philo->info->time_to_sleep, philo);
 }
 
@@ -65,21 +65,13 @@ static int	dead_fin_conditon(t_philo *philo)
 	}
 }
 
-void	two_plus(t_philo *philo, size_t *time)
+void	two_plus(t_philo *philo)
 {
-	timer_mutex(philo, time);
-	pthread_mutex_lock(&philo->info->endflag);
-	if (!philo->info->dead_or_finished)
-	{
-		pthread_mutex_lock(&philo->info->print);
-		printf("%zu %d is thinking\n", *time, philo->id);
-		pthread_mutex_unlock(&philo->info->print);
-	}
-	pthread_mutex_unlock(&philo->info->endflag);
+	action_printer("is thinking", philo->id, philo);
 	if (philo->id % 2 == 0)
-		even_eat_sleep(philo, *time);
+		even_eat_sleep(philo);
 	if (philo->id % 2 != 0)
-		odd_eat_sleep(philo, *time);
+		odd_eat_sleep(philo);
 }
 
 void	*routine(void *arg)
@@ -96,12 +88,13 @@ void	*routine(void *arg)
 		if (philo->info->philos_number == 1)
 		{
 			pthread_mutex_lock(philo->left_fork);
-			action_printer(1, &time, philo->id, philo);
+			action_printer("is thinking", philo->id, philo);
+			action_printer("has taken a fork", philo->id, philo);
 			ft_sleep(philo->info->time_to_die, philo);
 			pthread_mutex_unlock(philo->left_fork);
 			return (0);
 		}
-		two_plus(philo, &time);
+		two_plus(philo);
 	}
 	return (0);
 }
