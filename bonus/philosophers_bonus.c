@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/01 20:03:45 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/02 15:51:53 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ static void	start_routine(t_all *all)
 		kill(all->info.pid[i], SIGKILL);
 		i++;
 	}
-	sem_post(all->info.print);
-	close_sems(&all->info);
+	(sem_post(all->info.print), close_sems(&all->info));
 	free(all->info.pid);
 }
 

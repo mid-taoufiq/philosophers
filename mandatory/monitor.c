@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:18:52 by tibarike          #+#    #+#             */
-/*   Updated: 2025/06/26 16:31:26 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/02 14:32:27 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void	*monitoring(void *arg)
 	all = arg;
 	while (1)
 	{
-		usleep(10);
 		i = 0;
 		while (i < all->info.philos_number)
 		{
@@ -89,6 +88,7 @@ void	*monitoring(void *arg)
 			}
 			i++;
 		}
+		usleep(1000);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:16:00 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/02 14:02:41 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/02 14:45:13 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static void	even_eat_sleep(t_philo *philo)
 {
-	pthread_mutex_lock(philo->right_fork);
-	action_printer("has taken a fork", philo->id, philo);
 	pthread_mutex_lock(philo->left_fork);
+	action_printer("has taken a fork", philo->id, philo);
+	pthread_mutex_lock(philo->right_fork);
 	action_printer("has taken a fork", philo->id, philo);
 	action_printer("is eating", philo->id, philo);
 	pthread_mutex_lock(&philo->info->meals_mutex);
@@ -33,9 +33,9 @@ static void	even_eat_sleep(t_philo *philo)
 
 static void	odd_eat_sleep(t_philo *philo)
 {
-	pthread_mutex_lock(philo->left_fork);
-	action_printer("has taken a fork", philo->id, philo);
 	pthread_mutex_lock(philo->right_fork);
+	action_printer("has taken a fork", philo->id, philo);
+	pthread_mutex_lock(philo->left_fork);
 	action_printer("has taken a fork", philo->id, philo);
 	action_printer("is eating", philo->id, philo);
 	pthread_mutex_lock(&philo->info->meals_mutex);
@@ -81,10 +81,10 @@ void	*routine(void *arg)
 
 	philo = arg;
 	time = 0;
-	if (philo->id % 2 == 0)
-		usleep(300);
 	while (!dead_fin_conditon(philo))
 	{
+		if (philo->id % 2 == 0)
+			usleep(300);
 		if (philo->info->philos_number == 1)
 		{
 			pthread_mutex_lock(philo->left_fork);
