@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/02 18:09:00 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:08:53 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	ft_sleep(size_t time, t_philo *philo)
 {
 	size_t	start;
 
-	start = timer(0);
-	while (timer(0) - start < time)
+	start = timer();
+	while (timer() - start < time * 1000)
 	{
 		pthread_mutex_lock(&philo->info->endflag);
 		if (philo->info->dead_or_finished)
@@ -87,15 +87,12 @@ void	ft_sleep(size_t time, t_philo *philo)
 	}
 }
 
-size_t	timer(int start)
+size_t	timer(void)
 {
 	struct timeval	tv;
 	size_t			current_time;
-	static size_t	start_time;
 
 	gettimeofday(&tv, NULL);
 	current_time = (size_t)tv.tv_sec * 1000 + tv.tv_usec / 1000;
-	if (start)
-		start_time = current_time;
-	return (current_time - start_time);
+	return (current_time);
 }

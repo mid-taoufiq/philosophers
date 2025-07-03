@@ -2,7 +2,7 @@ NAME = philo_bonus
 
 HEADER = philosophers_bonus.h
 
-FLAGS = -Wall -Wextra -Werror -g3
+FLAGS = -Wall -Wextra -Werror
 
 SRC =	philosophers_bonus.c \
 		utils_bonus.c \

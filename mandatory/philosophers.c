@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/02 20:40:29 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:06:07 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,8 @@ static void	philo_init(t_all *all)
 			(i + 1) % all->info.philos_number];
 		all->philos[i].info = &all->info;
 		all->philos[i].finished = 0;
-		pthread_mutex_lock(&all->info.meals_mutex);
 		all->philos[i].meals_eaten = 0;
-		all->philos[i].last_meal = timer(0);
-		pthread_mutex_unlock(&all->info.meals_mutex);
+		all->philos[i].last_meal = timer();
 		i++;
 	}
 	start_routine(all);
@@ -105,6 +103,7 @@ static int	data_init(t_all *all, int argc, char **argv)
 	else
 		all->info.times_philo_must_eat = 0;
 	all->info.dead_or_finished = 0;
+	all->info.start = timer();
 	return (1);
 }
 
@@ -113,7 +112,6 @@ int	main(int argc, char **argv)
 	t_all		all;
 	size_t		i;
 
-	timer(1);
 	i = 0;
 	if (!data_init(&all, argc, argv))
 		return (1);
