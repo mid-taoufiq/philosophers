@@ -33,7 +33,6 @@ typedef struct s_info
 	size_t			times_philo_must_eat;
 	pthread_mutex_t	print;
 	pthread_mutex_t	endflag;
-	pthread_mutex_t	time;
 	pthread_mutex_t	meals_mutex;
 	pthread_mutex_t	*forks;
 }	t_info;
@@ -42,11 +41,11 @@ typedef struct s_philo
 {
 	int				id;
 	int				finished;
+	int				last_meal;
+	int				left_fork;
+	int				right_fork;
 	size_t			meals_eaten;
-	size_t			last_meal;
 	pthread_t		thread;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
 	t_info			*info;
 }	t_philo;
 
@@ -62,9 +61,9 @@ int		check_number(char *str);
 void	*routine(void *arg);
 size_t	timer(void);
 void	ft_sleep(size_t time, t_philo *philo);
+int		check_dead_fin(t_philo *philo);
 void	*monitoring(void *arg);
 void	action_printer(char *action, int id, t_philo *philo);
 int		mutex_init(t_all *all);
-void	unlock_mutexes(t_philo *philo);
 
 #endif
