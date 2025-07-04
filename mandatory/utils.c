@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/03 18:08:53 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:50:59 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ int	ft_atoi(char *nb, int *success)
 	while (nb[i] >= '0' && nb[i] <= '9')
 	{
 		result = (result * 10) + (nb[i] - '0');
-		if (result > INT_MAX)
-			return (*success = -1, 0);
 		i++;
 	}
 	if (nb[i] || result == 0)
@@ -74,7 +72,7 @@ void	ft_sleep(size_t time, t_philo *philo)
 	size_t	start;
 
 	start = timer();
-	while (timer() - start < time * 1000)
+	while (timer() - start < time)
 	{
 		pthread_mutex_lock(&philo->info->endflag);
 		if (philo->info->dead_or_finished)
@@ -93,6 +91,6 @@ size_t	timer(void)
 	size_t			current_time;
 
 	gettimeofday(&tv, NULL);
-	current_time = (size_t)tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	current_time = (size_t)tv.tv_usec / 1000 + tv.tv_sec * 1000;
 	return (current_time);
 }

@@ -7,8 +7,6 @@ FLAGS = -Wall -Wextra -Werror #-g -fsanitize=thread
 SRC =	philosophers.c \
 		utils.c \
 		utils2.c \
-		monitor.c \
-		routine.c
 
 OBJ = ${SRC:.c=.o}
 
