@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/04 18:10:10 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/04 19:30:43 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	thinking_time(t_philo *philo)
 	if (think_time == 0)
 		think_time = 1;
 	if (think_time > 600)
-		think_time = 200;
+		think_time = 100;
 	action_printer("is thinking", philo->id, philo);
 	ft_sleep(think_time, philo);
 }
@@ -79,7 +79,10 @@ void	*routine(void *arg)
 	if (philo->id % 2 == 0)
 		action_printer("is thinking", philo->id, philo);
 	else
-		thinking_time(philo);
+	{
+		action_printer("is thinking", philo->id, philo);
+		ft_sleep(philo->info->time_to_eat, philo); // if conidition for odds
+	}
 	while (!check_dead_fin(philo))
 	{
 		pthread_mutex_lock(&philo->info->forks[philo->left_fork]);
@@ -100,7 +103,8 @@ void	*routine(void *arg)
 		pthread_mutex_unlock(&philo->info->forks[philo->left_fork]);
 		action_printer("is sleeping", philo->id, philo);
 		ft_sleep(philo->info->time_to_sleep, philo);
-		thinking_time(philo);
+		action_printer("is thinking", philo->id, philo);
+		ft_sleep(philo->info->time_to_eat, philo); // if conidition for odds
 	}
 	return (0);
 }

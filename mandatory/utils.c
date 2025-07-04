@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/04 15:50:59 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/04 19:13:56 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	ft_sleep(size_t time, t_philo *philo)
 	size_t	start;
 
 	start = timer();
-	while (timer() - start < time)
+	while (timer() * 1000 - start * 1000 < time * 1000)
 	{
 		pthread_mutex_lock(&philo->info->endflag);
 		if (philo->info->dead_or_finished)
