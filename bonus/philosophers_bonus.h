@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/01 20:48:01 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/05 17:36:17 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include <sys/time.h>
 # include <semaphore.h>
 # include <fcntl.h>
-# include <sys/stat.h>
 # include <sys/wait.h>
 
 typedef struct s_info
@@ -38,7 +37,6 @@ typedef struct s_info
 	sem_t	*forks;
 	sem_t	*print;
 	sem_t	*meal_time;
-	sem_t	*endflag;
 	sem_t	*wait_finished;
 }	t_info;
 

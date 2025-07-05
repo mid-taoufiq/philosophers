@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/03 18:03:26 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/05 17:26:44 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 typedef struct s_info
 {
 	int				dead_or_finished;
-	size_t			start;
 	size_t			philos_number;
 	size_t			time_to_die;
 	size_t			time_to_eat;
@@ -59,11 +58,13 @@ int		ft_atoi(char *nb, int *success);
 void	usage_error(void);
 int		check_number(char *str);
 void	*routine(void *arg);
-size_t	timer(void);
+size_t	timer(int is_start);
 void	ft_sleep(size_t time, t_philo *philo);
 int		check_dead_fin(t_philo *philo);
 void	*monitoring(void *arg);
 void	action_printer(char *action, int id, t_philo *philo);
-int		mutex_init(t_all *all);
+bool	mutex_init(t_all *all);
+void	destroy_forks(t_all *all);
+void	destroy_remainings(t_all *all);
 
 #endif

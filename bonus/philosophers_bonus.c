@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/02 15:51:53 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/05 17:59:22 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static void	start_routine(t_all *all)
 			sem_wait(all->info.wait_finished);
 			i++;
 		}
+		sem_wait(all->info.print);
 	}
 	else
 		waitpid(-1, &status, 0);
@@ -37,6 +38,9 @@ static void	start_routine(t_all *all)
 		kill(all->info.pid[i], SIGKILL);
 		i++;
 	}
+	i = 0;
+	while (i < all->info.philos_number)
+		waitpid(all->info.pid[i++], &status, 0);
 	(sem_post(all->info.print), close_sems(&all->info));
 	free(all->info.pid);
 }

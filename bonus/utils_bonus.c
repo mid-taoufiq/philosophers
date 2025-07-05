@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/01 20:45:50 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/05 17:48:15 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ void	ft_sleep(size_t time)
 	size_t	start;
 
 	start = timer(0);
-	while (timer(0) - start < time)
-		usleep(50);
+	while (timer(0) * 1000 - start * 1000 < time * 1000)
+		usleep(200);
 }
 
 size_t	timer(int start)

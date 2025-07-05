@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 13:42:26 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/01 20:48:39 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/05 18:10:46 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void	*monitoring(void *arg)
 	philo = arg;
 	while (1)
 	{
-		usleep(100);
+		usleep(500);
 		dead_part(philo);
 	}
 	return (NULL);
@@ -77,13 +77,14 @@ void	routine(t_all *all, size_t i)
 	if (pthread_create(&monitor, NULL, monitoring, &philo) == -1)
 		return ;
 	pthread_detach(monitor);
-	if (philo.id % 2 == 0)
-		usleep(300);
+	if (philo.id % 2 != 0)
+		usleep(500);
 	while (1)
 	{
-		action_printer(philo.id, all, "is thinking");
-		(philo_take(philo.id, all), philo_eat(philo.id, all, &philo));
+		philo_take(philo.id, all);
+		philo_eat(philo.id, all, &philo);
 		philo_sleep(philo.id, all);
+		action_printer(philo.id, all, "is thinking");
 		if (all->info.times_philo_must_eat > 0
 			&& philo.meals_eaten >= all->info.times_philo_must_eat)
 		{

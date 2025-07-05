@@ -6,26 +6,11 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:58:20 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/02 12:56:20 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/05 17:47:22 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-int	mutex_init(t_all *all)
-{
-	if (pthread_mutex_init(&all->info.print, NULL) != 0)
-		return (1);
-	if (pthread_mutex_init(&all->info.endflag, NULL) != 0)
-		return (pthread_mutex_destroy(&all->info.print), 1);
-	if (pthread_mutex_init(&all->info.meals_mutex, NULL) != 0)
-	{
-		pthread_mutex_destroy(&all->info.print);
-		pthread_mutex_destroy(&all->info.endflag);
-		return (1);
-	}
-	return (0);
-}
 
 int	check_dead_fin(t_philo *philo)
 {
@@ -37,4 +22,24 @@ int	check_dead_fin(t_philo *philo)
 	}
 	pthread_mutex_unlock(&philo->info->endflag);
 	return (0);
+}
+
+void	destroy_forks(t_all *all)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < all->info.philos_number)
+	{
+		pthread_mutex_destroy(&all->info.forks[i]);
+		i++;
+	}
+}
+
+void	destroy_remainings(t_all *all)
+{
+	destroy_forks(all);
+	pthread_mutex_destroy(&all->info.meals_mutex);
+	pthread_mutex_destroy(&all->info.print);
+	pthread_mutex_destroy(&all->info.endflag);
 }

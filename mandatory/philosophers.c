@@ -6,167 +6,128 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/03 18:06:07 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/05 16:51:40 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	action_printer(char *action, int id, t_philo *philo)
+bool	start_routine(t_all *all)
 {
-	pthread_mutex_lock(&philo->info->print);
-	if (!check_dead_fin(philo))
-		printf("%zu %d %s\n", timer() - philo->info->start, id, action);
-	pthread_mutex_unlock(&philo->info->print);
-}
+	size_t		i;
+	pthread_t	monitor;
 
-void	*monitoring(void *arg)
-{
-	t_all	*all;
-	size_t	flag;
-	size_t	i;
-
-	all = (t_all *)arg;
+	timer(1);
 	i = 0;
-	flag = 0;
-	while (1)
+	while (i < all->info.philos_number)
 	{
-		usleep(500);
+		if (pthread_create(&all->philos[i].thread, NULL,
+				routine, &all->philos[i]) != 0)
+		{
+			while ((int)--i >= 0)
+				pthread_join(all->philos[i].thread, NULL);
+			return (false);
+		}
+		i++;
+	}
+	if (pthread_create(&monitor, NULL, monitoring, all) != 0)
+	{
 		i = 0;
 		while (i < all->info.philos_number)
-		{
-			pthread_mutex_lock(&all->info.meals_mutex);
-			flag = (timer() - all->info.start) - all->philos[i].last_meal;
-			pthread_mutex_unlock(&all->info.meals_mutex);
-			if (flag > all->info.time_to_die)
-			{
-				pthread_mutex_lock(&all->info.endflag);
-				all->info.dead_or_finished = 1;
-				pthread_mutex_unlock(&all->info.endflag);
-				pthread_mutex_lock(&all->info.print);
-				printf("%zu %d died\n", timer() - all->info.start, all->philos[i].id);
-				pthread_mutex_unlock(&all->info.print);
-				return (0);
-			}
-			i++;
-		}
+			pthread_join(all->philos[i++].thread, NULL);
+		return (false);
 	}
+	pthread_join(monitor, NULL);
+	return (true);
 }
 
-void	*routine(void *arg)
+bool	mutex_init(t_all *all)
 {
-	t_philo	*philo;
-	size_t	eat_time;
+	size_t	i;
 
-	eat_time = 0;
-	philo = (t_philo *)arg;
-	if (philo->id % 2 == 0)
-		action_printer("is thinking", philo->id, philo);
+	i = 0;
+	while (i < all->info.philos_number)
+	{
+		if (pthread_mutex_init(&all->info.forks[i], NULL) != 0)
+		{
+			while ((int)--i >= 0)
+				pthread_mutex_destroy(&all->info.forks[i]);
+			return (false);
+		}
+		i++;
+	}
+	if (pthread_mutex_init(&all->info.meals_mutex, NULL) != 0)
+		return (destroy_forks(all), false);
+	if (pthread_mutex_init(&all->info.print, NULL) != 0)
+		return (destroy_forks(all),
+			pthread_mutex_destroy(&all->info.meals_mutex), false);
+	if (pthread_mutex_init(&all->info.endflag, NULL) != 0)
+		(destroy_forks(all), pthread_mutex_destroy(&all->info.print),
+			pthread_mutex_destroy(&all->info.meals_mutex), false);
+	return (true);
+}
+
+void	info_init(t_all *all, int argc, char **argv)
+{
+	all->info.philos_number = check_number(argv[1]);
+	all->info.time_to_die = check_number(argv[2]);
+	all->info.time_to_eat = check_number(argv[3]);
+	all->info.time_to_sleep = check_number(argv[4]);
+	if (argc == 6)
+		all->info.times_philo_must_eat = check_number(argv[5]);
 	else
+		all->info.times_philo_must_eat = 0;
+	all->info.dead_or_finished = 0;
+}
+
+bool	philo_init(t_all *all)
+{
+	size_t	i;
+
+	i = 0;
+	all->philos = malloc(sizeof(t_philo) * all->info.philos_number);
+	if (!all->philos)
+		return (false);
+	memset(all->philos, 0, sizeof(t_philo) * all->info.philos_number);
+	while (i < all->info.philos_number)
 	{
-		action_printer("is thinking", philo->id, philo);
-		if (philo->info->philos_number % 2 != 0)
-			ft_sleep(philo->info->time_to_eat, philo);
+		all->philos[i].id = i + 1;
+		all->philos[i].last_meal = 0;
+		all->philos[i].meals_eaten = 0;
+		all->philos[i].finished = 0;
+		all->philos[i].left_fork = i;
+		all->philos[i].right_fork = (i + 1) % all->info.philos_number;
+		all->philos[i].info = &all->info;
+		i++;
 	}
-	while (!check_dead_fin(philo))
-	{
-		pthread_mutex_lock(&philo->info->forks[philo->left_fork]);
-		action_printer("has taken a fork", philo->id, philo);
-		pthread_mutex_lock(&philo->info->forks[philo->right_fork]);
-		action_printer("has taken a fork", philo->id, philo);
-		eat_time = timer() - philo->info->start;
-		pthread_mutex_lock(&philo->info->print);
-		if (!check_dead_fin(philo))
-			printf("%zu %d is eating\n", eat_time, philo->id);
-		pthread_mutex_unlock(&philo->info->print);
-		pthread_mutex_lock(&philo->info->meals_mutex);
-		philo->last_meal = eat_time;
-		philo->meals_eaten++;
-		pthread_mutex_unlock(&philo->info->meals_mutex);
-		ft_sleep(philo->info->time_to_eat, philo);
-		pthread_mutex_unlock(&philo->info->forks[philo->right_fork]);
-		pthread_mutex_unlock(&philo->info->forks[philo->left_fork]);
-		action_printer("is sleeping", philo->id, philo);
-		ft_sleep(philo->info->time_to_sleep, philo);
-		action_printer("is thinking", philo->id, philo);
-		if (philo->info->philos_number % 2 != 0)
-			ft_sleep(philo->info->time_to_eat, philo);
-	}
-	return (0);
+	return (true);
 }
 
 int	main(int argc, char **argv)
 {
 	t_all		all;
 	size_t		i;
-	pthread_t	monitor;
 
 	i = 0;
-	if (argc != 5 && argc != 6)
-		usage_error();
-	all.info.philos_number = check_number(argv[1]);
-	all.info.time_to_die = check_number(argv[2]);
-	all.info.time_to_eat = check_number(argv[3]);
-	all.info.time_to_sleep = check_number(argv[4]);
-	if (argc == 6)
-		all.info.times_philo_must_eat = check_number(argv[5]);
-	else
-		all.info.times_philo_must_eat = 0;
-	all.info.dead_or_finished = 0;
-	all.info.start = timer();
+	info_init(&all, argc, argv);
 	all.info.forks = malloc(sizeof(pthread_mutex_t) * all.info.philos_number);
+	if (!all.info.forks)
+		return (1);
 	memset(all.info.forks, 0, sizeof(pthread_mutex_t) * all.info.philos_number);
-	while (i < all.info.philos_number)
-	{
-		pthread_mutex_init(&all.info.forks[i], NULL);
-		i++;
-	}
-	pthread_mutex_init(&all.info.meals_mutex, NULL);
-	pthread_mutex_init(&all.info.print, NULL);
-	pthread_mutex_init(&all.info.endflag, NULL);
-	all.philos = malloc(sizeof(t_philo) * all.info.philos_number);
-	memset(all.philos, 0, sizeof(t_philo) * all.info.philos_number);
-	i = 0;
-	while (i < all.info.philos_number)
-	{
-		all.philos[i].id = i + 1;
-		all.philos[i].last_meal = timer() - all.info.start;
-		all.philos[i].meals_eaten = 0;
-		all.philos[i].finished = 0;
-		if (all.philos[i].id % 2 != 0)
-		{
-			all.philos[i].left_fork = i;
-			all.philos[i].right_fork = (i + 1) % all.info.philos_number;
-		}
-		else
-		{
-			all.philos[i].left_fork = (i + 1) % all.info.philos_number;
-			all.philos[i].right_fork = i;
-		}
-		all.philos[i].info = &all.info;
-		i++;
-	}
-	i = 0;
-	while (i < all.info.philos_number)
-	{
-		pthread_create(&all.philos[i].thread, NULL, routine, &all.philos[i]);
-		i++;
-	}
-	pthread_create(&monitor, NULL, monitoring, &all);
-	pthread_join(monitor, NULL);
+	if (!mutex_init(&all))
+		return (free(all.info.forks), 1);
+	if (!philo_init(&all))
+		return (free(all.info.forks), 1);
+	if (!start_routine(&all))
+		return (free(all.info.forks), free(all.philos), 1);
 	i = 0;
 	while (i < all.info.philos_number)
 	{
 		pthread_join(all.philos[i].thread, NULL);
 		i++;
 	}
-	while (i < all.info.philos_number)
-	{
-		pthread_mutex_destroy(&all.info.forks[i]);
-		i++;
-	}
-	pthread_mutex_destroy(&all.info.meals_mutex);
-	pthread_mutex_destroy(&all.info.print);
-	pthread_mutex_destroy(&all.info.endflag);
+	destroy_remainings(&all);
+	free(all.info.forks);
+	free(all.philos);
 	return (0);
 }
