@@ -78,10 +78,10 @@ void	routine(t_all *all, size_t i)
 		usleep(500);
 	while (1)
 	{
-		philo_take(philo.id, all);
-		philo_eat(philo.id, all, &philo);
-		philo_sleep(philo.id, all);
-		action_printer(philo.id, all, "is thinking");
+		philo_take(philo.id, &philo);
+		philo_eat(philo.id, &philo);
+		philo_sleep(philo.id, &philo);
+		action_printer(philo.id, &philo, "is thinking");
 		if (all->info.times_philo_must_eat > 0
 			&& philo.meals_eaten >= all->info.times_philo_must_eat)
 		{

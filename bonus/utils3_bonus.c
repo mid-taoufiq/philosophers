@@ -15,7 +15,6 @@
 static void	sems_create2(t_all *all)
 {
 	all->info.meal_time = sem_open("/meal_time", O_CREAT, 0644, 1);
-	sem_unlink("/meal_time");
 	if (all->info.meal_time == SEM_FAILED)
 	{
 		sem_close(all->info.print);
@@ -23,7 +22,6 @@ static void	sems_create2(t_all *all)
 		exit(1);
 	}
 	all->info.wait_finished = sem_open("/wait_finished", O_CREAT, 0644, 1);
-	sem_unlink("/wait_finished");
 	if (all->info.wait_finished == SEM_FAILED)
 	{
 		sem_close(all->info.print);
@@ -31,17 +29,21 @@ static void	sems_create2(t_all *all)
 		sem_close(all->info.meal_time);
 		exit(1);
 	}
+	all->info.turn = sem_open("/turn", O_CREAT, 0644, 1);
 }
 
 void	sems_create(t_all *all)
 {
+	sem_unlink("/meal_time");
+	sem_unlink("/forks");
+	sem_unlink("/wait_finished");
+	sem_unlink("/print");
+	sem_unlink("/turn");
 	all->info.forks = sem_open("/forks", O_CREAT,
 			0644, all->info.philos_number);
-	sem_unlink("/forks");
 	if (all->info.forks == SEM_FAILED)
 		exit(1);
 	all->info.print = sem_open("/print", O_CREAT, 0644, 1);
-	sem_unlink("/print");
 	if (all->info.print == SEM_FAILED)
 	{
 		sem_close(all->info.forks);
@@ -81,6 +83,7 @@ void	close_sems(t_info *info)
 {
 	sem_close(info->forks);
 	sem_close(info->print);
+	sem_close(info->turn);
 	sem_close(info->meal_time);
 	sem_close(info->wait_finished);
 }

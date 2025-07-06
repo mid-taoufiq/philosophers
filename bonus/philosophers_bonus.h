@@ -37,7 +37,7 @@ typedef struct s_info
 	sem_t	*print;
 	sem_t	*meal_time;
 	sem_t	*wait_finished;
-	sem_t	*print_finished;
+	sem_t	*turn;
 }	t_info;
 
 typedef struct s_philo
@@ -61,15 +61,13 @@ int		check_number(char *str);
 size_t	timer(int start);
 void	ft_sleep(size_t time);
 void	ft_putstr_fd(char *s, int fd);
-void	action_printer(size_t id, t_all *all, char *action);
-void	philo_take(size_t id, t_all *all);
-void	philo_eat(size_t id, t_all *all, t_philo *philo);
-void	philo_sleep(size_t id, t_all *all);
+void	action_printer(size_t id, t_philo *philo, char *action);
+void	philo_take(size_t id, t_philo *philo);
+void	philo_eat(size_t id, t_philo *philo);
+void	philo_sleep(size_t id, t_philo *philo);
 void	routine(t_all *all, size_t i);
 void	sems_create(t_all *all);
 void	close_sems(t_info *info);
 int		create_children(t_all *all);
-bool	check_finished_eating(t_philo *philo);
-bool	check_finished(t_philo *philo);
 
 #endif
