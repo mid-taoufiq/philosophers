@@ -45,9 +45,6 @@ static void	dead_part(t_philo *philo)
 	{
 		sem_wait(philo->info->print);
 		printf("%zu %d died\n", timer(0), philo->id);
-		sem_wait(philo->info->meal_time);
-		philo->info->dead_or_finished = 1;
-		sem_post(philo->info->meal_time);
 		post_remainings(philo);
 		free(philo->info->pid);
 		close_sems(philo->info);

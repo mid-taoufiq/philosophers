@@ -27,7 +27,6 @@
 
 typedef struct s_info
 {
-	int		dead_or_finished;
 	size_t	philos_number;
 	size_t	time_to_die;
 	size_t	time_to_eat;
@@ -38,6 +37,7 @@ typedef struct s_info
 	sem_t	*print;
 	sem_t	*meal_time;
 	sem_t	*wait_finished;
+	sem_t	*print_finished;
 }	t_info;
 
 typedef struct s_philo
@@ -69,5 +69,7 @@ void	routine(t_all *all, size_t i);
 void	sems_create(t_all *all);
 void	close_sems(t_info *info);
 int		create_children(t_all *all);
+bool	check_finished_eating(t_philo *philo);
+bool	check_finished(t_philo *philo);
 
 #endif

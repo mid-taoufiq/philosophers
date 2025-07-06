@@ -28,7 +28,6 @@ static void	start_routine(t_all *all)
 			sem_wait(all->info.wait_finished);
 			i++;
 		}
-		sem_wait(all->info.print);
 	}
 	else
 		waitpid(-1, &status, 0);
@@ -51,7 +50,6 @@ static void	data_init(t_all *all, int argc, char **argv)
 	all->info.time_to_die = check_number(argv[2]);
 	all->info.time_to_eat = check_number(argv[3]);
 	all->info.time_to_sleep = check_number(argv[4]);
-	all->info.dead_or_finished = 0;
 	if (argc == 6)
 		all->info.times_philo_must_eat = check_number(argv[5]);
 	else
