@@ -6,12 +6,11 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 15:51:29 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/05 17:47:05 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:28:05 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
 
 static bool	check_finished(t_all *all)
 {
@@ -92,4 +91,5 @@ void	*monitoring(void *arg)
 			i++;
 		}
 	}
+	return (0);
 }

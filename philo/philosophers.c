@@ -6,13 +6,13 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/05 16:51:40 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:26:03 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-bool	start_routine(t_all *all)
+static bool	start_routine(t_all *all)
 {
 	size_t		i;
 	pthread_t	monitor;
@@ -41,7 +41,7 @@ bool	start_routine(t_all *all)
 	return (true);
 }
 
-bool	mutex_init(t_all *all)
+static bool	mutex_init(t_all *all)
 {
 	size_t	i;
 
@@ -67,7 +67,7 @@ bool	mutex_init(t_all *all)
 	return (true);
 }
 
-void	info_init(t_all *all, int argc, char **argv)
+static void	info_init(t_all *all, int argc, char **argv)
 {
 	all->info.philos_number = check_number(argv[1]);
 	all->info.time_to_die = check_number(argv[2]);
@@ -80,7 +80,7 @@ void	info_init(t_all *all, int argc, char **argv)
 	all->info.dead_or_finished = 0;
 }
 
-bool	philo_init(t_all *all)
+static bool	philo_init(t_all *all)
 {
 	size_t	i;
 

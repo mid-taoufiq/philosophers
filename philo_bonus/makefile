@@ -2,7 +2,7 @@ NAME = philo_bonus
 
 HEADER = philosophers_bonus.h
 
-FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror
 
 SRC =	philosophers_bonus.c \
 		utils_bonus.c \

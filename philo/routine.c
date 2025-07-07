@@ -6,13 +6,21 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 15:52:18 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/07 16:11:33 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:28:32 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-bool	case_one(t_philo *philo)
+static void	action_printer(char *action, int id, t_philo *philo)
+{
+	pthread_mutex_lock(&philo->info->print);
+	if (!check_dead_fin(philo))
+		printf("%zu %d %s\n", timer(0), id, action);
+	pthread_mutex_unlock(&philo->info->print);
+}
+
+static bool	case_one(t_philo *philo)
 {
 	if (philo->info->philos_number == 1)
 	{
@@ -25,15 +33,7 @@ bool	case_one(t_philo *philo)
 	return (false);
 }
 
-void	action_printer(char *action, int id, t_philo *philo)
-{
-	pthread_mutex_lock(&philo->info->print);
-	if (!check_dead_fin(philo))
-		printf("%zu %d %s\n", timer(0), id, action);
-	pthread_mutex_unlock(&philo->info->print);
-}
-
-void	take_eat(t_philo *philo)
+static void	take_eat(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
 	{
@@ -57,7 +57,7 @@ void	take_eat(t_philo *philo)
 	ft_sleep(philo->info->time_to_eat, philo);
 }
 
-void	unlock_forks(t_philo *philo)
+static void	unlock_forks(t_philo *philo)
 {
 	if (philo->id % 2 != 0)
 	{
@@ -74,9 +74,7 @@ void	unlock_forks(t_philo *philo)
 void	*routine(void *arg)
 {
 	t_philo	*philo;
-	size_t	eat_time;
 
-	eat_time = 0;
 	philo = (t_philo *)arg;
 	if (case_one(philo))
 		return (0);
@@ -91,6 +89,8 @@ void	*routine(void *arg)
 	{
 		take_eat(philo);
 		unlock_forks(philo);
+		if (check_philo_finished(philo))
+			return (0);
 		action_printer("is sleeping", philo->id, philo);
 		ft_sleep(philo->info->time_to_sleep, philo);
 		action_printer("is thinking", philo->id, philo);

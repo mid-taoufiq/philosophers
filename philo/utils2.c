@@ -6,11 +6,21 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:58:20 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/05 17:47:22 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:28:11 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+int	check_philo_finished(t_philo *philo)
+{
+	int	finished;
+
+	pthread_mutex_lock(&philo->info->meals_mutex);
+	finished = philo->finished;
+	pthread_mutex_unlock(&philo->info->meals_mutex);
+	return (finished);
+}
 
 int	check_dead_fin(t_philo *philo)
 {

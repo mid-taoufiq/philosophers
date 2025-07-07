@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/07 15:27:14 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:30:43 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	start_routine(t_info *info)
 	free(info->pid);
 }
 
-void	sem_create(t_info *info)
+static void	sem_create(t_info *info)
 {
 	info->forks = sem_open("/forks", O_CREAT, 0666, info->philos_number);
 	if (info->forks == SEM_FAILED)

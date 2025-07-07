@@ -2,7 +2,7 @@ NAME = philo
 
 HEADER = philosophers.h
 
-FLAGS = -Wall -Wextra -Werror #-g -fsanitize=thread
+FLAGS = -Wall -Wextra -Werror
 
 SRC =	philosophers.c \
 		utils.c \
