@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/05 17:36:17 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/07 15:03:59 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 
 typedef struct s_info
 {
+	int		dead_or_finished;
 	size_t	philos_number;
 	size_t	time_to_die;
 	size_t	time_to_eat;
@@ -44,16 +45,10 @@ typedef struct s_philo
 {
 	int		id;
 	size_t	meals_eaten;
+	int		finished;
 	size_t	last_meal;
-	bool	finished;
 	t_info	*info;
 }	t_philo;
-
-typedef struct s_all
-{
-	t_info	info;
-	t_philo	*philos;
-}	t_all;
 
 int		ft_atoi(char *nb, int *success);
 void	usage_error(void);
@@ -61,13 +56,14 @@ int		check_number(char *str);
 size_t	timer(int start);
 void	ft_sleep(size_t time);
 void	ft_putstr_fd(char *s, int fd);
-void	action_printer(size_t id, t_philo *philo, char *action);
-void	philo_take(size_t id, t_philo *philo);
-void	philo_eat(size_t id, t_philo *philo);
-void	philo_sleep(size_t id, t_philo *philo);
-void	routine(t_all *all, size_t i);
-void	sems_create(t_all *all);
+void	action_printer(size_t id, t_info *info, char *action);
+void	philo_take(size_t id, t_info *info);
+void	philo_eat(size_t id, t_info *info, t_philo *philo);
+void	philo_sleep(size_t id, t_info *info);
+void	routine(t_info *info, size_t i);
 void	close_sems(t_info *info);
-int		create_children(t_all *all);
+int		create_children(t_info *info);
+bool	check_meals(t_philo	*philo);
+bool	check_finished(t_philo	*philo);
 
 #endif

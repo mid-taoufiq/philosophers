@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 15:52:18 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/05 17:47:09 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/07 16:11:33 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,12 @@ void	*routine(void *arg)
 	philo = (t_philo *)arg;
 	if (case_one(philo))
 		return (0);
-	if (philo->id % 2 == 0)
+	if (philo->id % 2 != 0)
 	{
 		if (philo->info->philos_number % 2 != 0)
 			ft_sleep(philo->info->time_to_eat, philo);
+		else
+			usleep(500);
 	}
 	while (!check_dead_fin(philo))
 	{
