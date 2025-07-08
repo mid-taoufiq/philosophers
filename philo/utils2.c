@@ -6,11 +6,26 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:58:20 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/08 10:35:34 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:13:42 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+int	routine_loop(t_philo *philo)
+{
+	while (!check_dead_fin(philo))
+	{
+		take_eat(philo);
+		unlock_forks(philo);
+		if (check_philo_finished(philo))
+			return (0);
+		action_printer("is sleeping", philo->id, philo);
+		ft_sleep(philo->info->time_to_sleep, philo);
+		action_printer("is thinking", philo->id, philo);
+	}
+	return (1);
+}
 
 int	check_philo_finished(t_philo *philo)
 {
@@ -46,7 +61,7 @@ void	destroy_forks(t_all *all)
 	}
 }
 
-void	destroy_remainings(t_all *all)
+void	destroy_mutex(t_all *all)
 {
 	destroy_forks(all);
 	pthread_mutex_destroy(&all->info.meals_mutex);

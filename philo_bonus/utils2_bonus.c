@@ -6,11 +6,32 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:58:20 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/07 14:57:40 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:03:07 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
+
+void	fork_fail(t_info *info, size_t i)
+{
+	size_t	j;
+	int		status;
+
+	j = 0;
+	status = 0;
+	free(info->pid);
+	ft_putstr_fd("fork failed\n", 2);
+	while (j < i)
+	{
+		kill(info->pid[j], SIGKILL);
+		j++;
+	}
+	while (waitpid(-1, &status, 0) == 0)
+		continue ;
+	close_sems(info);
+	free(info->pid);
+	exit(1);
+}
 
 void	action_printer(size_t id, t_info *info, char *action)
 {

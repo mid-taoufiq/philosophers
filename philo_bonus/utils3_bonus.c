@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 14:04:52 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/08 09:59:16 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:02:53 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,14 @@ bool	check_finished(t_philo	*philo)
 	return (finished);
 }
 
-int	create_children(t_info *info)
+void	create_children(t_info *info)
 {
 	size_t	i;
 
 	i = 0;
 	info->pid = malloc(sizeof(pid_t) * info->philos_number);
 	if (!info->pid)
-		return (-1);
-	i = 0;
+		exit(1);
 	while (i < info->philos_number)
 	{
 		info->pid[i] = fork();
@@ -52,14 +51,9 @@ int	create_children(t_info *info)
 			exit(0);
 		}
 		else if (info->pid[i] < 0)
-		{
-			free(info->pid);
-			ft_putstr_fd("fork failed\n", 2);
-			return (-1);
-		}
+			fork_fail(info, i);
 		i++;
 	}
-	return (0);
 }
 
 void	close_sems(t_info *info)

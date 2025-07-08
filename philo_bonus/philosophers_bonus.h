@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/08 10:29:05 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:07:27 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,9 @@ void	philo_eat(size_t id, t_info *info, t_philo *philo);
 void	philo_sleep(size_t id, t_info *info);
 void	routine(t_info *info, size_t i);
 void	close_sems(t_info *info);
-int		create_children(t_info *info);
+void	create_children(t_info *info);
 bool	check_meals(t_philo	*philo);
 bool	check_finished(t_philo	*philo);
+void	fork_fail(t_info *info, size_t i);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/08 10:29:00 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:03:46 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ static void	start_routine(t_info *info)
 	int		status;
 
 	timer(1);
-	if (create_children(info) == -1)
-		return ;
+	create_children(info);
 	waitpid(-1, &status, 0);
 	if (WIFEXITED(status) == 1)
 	{

@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/08 13:25:58 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:05:45 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,17 +131,17 @@ int	main(int argc, char **argv)
 		return (1);
 	memset(all.info.forks, 0, sizeof(pthread_mutex_t) * all.info.philos_number);
 	if (!mutex_init(&all))
-		return (free(all.info.forks), 1);
+		return (free(all.info.forks), destroy_mutex(&all), 1);
 	if (!philo_init(&all))
-		return (free(all.info.forks), 1);
+		return (free(all.info.forks), destroy_mutex(&all), 1);
 	if (!start_routine(&all))
-		return (free(all.info.forks), free(all.philos), 1);
+		return (free(all.info.forks), destroy_mutex(&all), free(all.philos), 1);
 	i = 0;
 	while (i < all.info.philos_number)
 	{
 		pthread_join(all.philos[i].thread, NULL);
 		i++;
 	}
-	(destroy_remainings(&all), free(all.info.forks), free(all.philos));
+	(destroy_mutex(&all), free(all.info.forks), free(all.philos));
 	return (0);
 }
