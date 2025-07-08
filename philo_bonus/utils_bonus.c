@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/05 17:48:15 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/08 10:08:05 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ int	check_number(char *str)
 	value = ft_atoi(str, &success);
 	if (success == -2)
 	{
-		write(2, "all numbers must positive\n", 27);
+		write(2, "all numbers must positive\n", 29);
 		exit(1);
 	}
 	else if (success == -1)
 	{
-		write(2, "entre a valid numbers\n", 23);
+		write(2, "enter a valid number\n", 22);
 		exit(1);
 	}
 	return (value);

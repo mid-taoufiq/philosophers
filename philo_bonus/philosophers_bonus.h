@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:32:27 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/07 15:03:59 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/08 10:29:05 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 
 typedef struct s_info
 {
-	int		dead_or_finished;
 	size_t	philos_number;
 	size_t	time_to_die;
 	size_t	time_to_eat;

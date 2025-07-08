@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/07 17:26:03 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/08 13:25:58 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,20 +64,34 @@ static bool	mutex_init(t_all *all)
 	if (pthread_mutex_init(&all->info.endflag, NULL) != 0)
 		(destroy_forks(all), pthread_mutex_destroy(&all->info.print),
 			pthread_mutex_destroy(&all->info.meals_mutex), false);
+	pthread_mutex_init(&all->info.turn, NULL);
 	return (true);
 }
 
-static void	info_init(t_all *all, int argc, char **argv)
+static bool	info_init(t_all *all, int argc, char **argv)
 {
 	all->info.philos_number = check_number(argv[1]);
+	if (all->info.philos_number == 0)
+		return (false);
 	all->info.time_to_die = check_number(argv[2]);
+	if (all->info.time_to_die == 0)
+		return (false);
 	all->info.time_to_eat = check_number(argv[3]);
+	if (all->info.time_to_eat == 0)
+		return (false);
 	all->info.time_to_sleep = check_number(argv[4]);
+	if (all->info.time_to_sleep == 0)
+		return (false);
 	if (argc == 6)
+	{
 		all->info.times_philo_must_eat = check_number(argv[5]);
+		if (all->info.times_philo_must_eat == 0)
+			return (false);
+	}
 	else
 		all->info.times_philo_must_eat = 0;
 	all->info.dead_or_finished = 0;
+	return (true);
 }
 
 static bool	philo_init(t_all *all)
@@ -108,8 +122,10 @@ int	main(int argc, char **argv)
 	t_all		all;
 	size_t		i;
 
-	i = 0;
-	info_init(&all, argc, argv);
+	if (argc != 5 && argc != 6)
+		return (usage_error(), 1);
+	if (!info_init(&all, argc, argv))
+		return (1);
 	all.info.forks = malloc(sizeof(pthread_mutex_t) * all.info.philos_number);
 	if (!all.info.forks)
 		return (1);
@@ -126,8 +142,6 @@ int	main(int argc, char **argv)
 		pthread_join(all.philos[i].thread, NULL);
 		i++;
 	}
-	destroy_remainings(&all);
-	free(all.info.forks);
-	free(all.philos);
+	(destroy_remainings(&all), free(all.info.forks), free(all.philos));
 	return (0);
 }

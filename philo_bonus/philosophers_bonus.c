@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/07 17:30:43 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/08 10:29:00 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ static void	data_init(t_info *info, int argc, char **argv)
 	info->time_to_die = check_number(argv[2]);
 	info->time_to_eat = check_number(argv[3]);
 	info->time_to_sleep = check_number(argv[4]);
-	info->dead_or_finished = 0;
 	if (argc == 6)
 		info->times_philo_must_eat = check_number(argv[5]);
 	else

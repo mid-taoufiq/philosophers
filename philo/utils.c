@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 00:32:14 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/05 17:47:16 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/08 10:35:05 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	ft_atoi(char *nb, int *success)
 	while (nb[i] >= '0' && nb[i] <= '9')
 	{
 		result = (result * 10) + (nb[i] - '0');
+		if (result > INT_MAX)
+			return (*success = -1, 0);
 		i++;
 	}
 	if (nb[i] || result == 0)
@@ -44,7 +46,6 @@ void	usage_error(void)
 	write(2, " \"time to eat\"", 15);
 	write(2, " \"time to sleep\"", 17);
 	write(2, " (op) \"number of time each philo must eat\"\n", 44);
-	exit(1);
 }
 
 int	check_number(char *str)
@@ -56,12 +57,12 @@ int	check_number(char *str)
 	value = ft_atoi(str, &success);
 	if (success == -2)
 	{
-		write(2, "all numbers must positive\n", 27);
+		write(2, "all numbers must be positive\n", 29);
 		return (0);
 	}
 	else if (success == -1)
 	{
-		write(2, "entre a valid numbers\n", 23);
+		write(2, "enter a valid number\n", 22);
 		return (0);
 	}
 	return (value);

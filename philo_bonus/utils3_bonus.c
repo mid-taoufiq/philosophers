@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 14:04:52 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/07 15:32:19 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/08 09:59:16 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	create_children(t_info *info)
 		else if (info->pid[i] < 0)
 		{
 			free(info->pid);
-			ft_putstr_fd("fork failed", 2);
+			ft_putstr_fd("fork failed\n", 2);
 			return (-1);
 		}
 		i++;
