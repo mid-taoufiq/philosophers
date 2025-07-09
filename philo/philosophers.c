@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:35:01 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/08 17:05:45 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/09 10:41:16 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,8 @@ static bool	mutex_init(t_all *all)
 		return (destroy_forks(all),
 			pthread_mutex_destroy(&all->info.meals_mutex), false);
 	if (pthread_mutex_init(&all->info.endflag, NULL) != 0)
-		(destroy_forks(all), pthread_mutex_destroy(&all->info.print),
+		return (destroy_forks(all), pthread_mutex_destroy(&all->info.print),
 			pthread_mutex_destroy(&all->info.meals_mutex), false);
-	pthread_mutex_init(&all->info.turn, NULL);
 	return (true);
 }
 

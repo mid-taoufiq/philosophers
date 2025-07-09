@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 15:51:29 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/07 17:28:05 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/09 10:38:13 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,10 @@ static bool	dead_part(t_all *all, size_t i)
 void	*monitoring(void *arg)
 {
 	t_all	*all;
-	size_t	flag;
 	size_t	i;
 
 	all = (t_all *)arg;
 	i = 0;
-	flag = 0;
 	while (1)
 	{
 		usleep(500);
