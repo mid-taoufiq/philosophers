@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 13:42:26 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/08 10:28:55 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/09 18:02:31 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	init_philo(t_philo *philo, t_info *info, size_t i)
 	philo->id = i + 1;
 	philo->info = info;
 	philo->finished = 0;
-	philo->last_meal = 0;
+	philo->last_meal = timer(0);
 	philo->meals_eaten = 0;
 }
 
@@ -66,7 +66,7 @@ void	routine(t_info *info, size_t i)
 		return ;
 	pthread_detach(monitor);
 	if (philo.id % 2 != 0)
-		usleep(500);
+		ft_sleep(info->time_to_eat);
 	while (1)
 	{
 		philo_take(philo.id, info);

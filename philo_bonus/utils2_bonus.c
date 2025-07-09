@@ -6,7 +6,7 @@
 /*   By: tibarike <tibarike@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:58:20 by tibarike          #+#    #+#             */
-/*   Updated: 2025/07/08 17:03:07 by tibarike         ###   ########.fr       */
+/*   Updated: 2025/07/09 18:07:48 by tibarike         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,19 @@ void	fork_fail(t_info *info, size_t i)
 
 void	action_printer(size_t id, t_info *info, char *action)
 {
-	sem_wait(info->turn);
 	sem_wait(info->print);
 	printf("%zu %ld %s\n", timer(0), id, action);
 	sem_post(info->print);
-	sem_post(info->turn);
 }
 
 void	philo_take(size_t id, t_info *info)
 {
+	sem_wait(info->turn);
 	sem_wait(info->forks);
 	action_printer(id, info, "has taken a fork");
 	sem_wait(info->forks);
 	action_printer(id, info, "has taken a fork");
+	sem_post(info->turn);
 }
 
 void	philo_eat(size_t id, t_info *info, t_philo *philo)
